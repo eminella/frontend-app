@@ -16,7 +16,8 @@ export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [activeMenu, setActiveMenu] = useState('products');
 
-  const API_URL = 'http://localhost:3500/products';
+  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/products`;
+
 
   // Ürünleri getir
   const fetchProducts = async () => {
