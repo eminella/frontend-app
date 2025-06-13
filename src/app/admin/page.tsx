@@ -32,42 +32,47 @@ export default function AdminPage() {
     fetchProducts();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (!name || !price || !image) {
-      alert('Lütfen tüm alanları doldurun.');
+      alert("Lütfen tüm alanları doldurun.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', price);
-    formData.append('image', image); // 🟢 burası önemli
-
+    formData.append('image', image); // 👈 burada image tipinin File olduğundan emin ol
+  
     try {
       const res = await fetch(API_URL, {
         method: 'POST',
         body: formData,
       });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert('Ürün başarıyla eklendi');
-        setName('');
-        setPrice('');
-        setImage(null);
-        fetchProducts(); // listeyi güncelle
-      } else {
-        alert(`Hata: ${data.error || 'Ürün eklenemedi.'}`);
+  
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("HATA:", errorText);
+        alert("Ürün eklenemedi");
+        return;
       }
+  
+      const data = await res.json();
+      console.log("✅ Ürün eklendi:", data);
+  
+      // Formu temizle
+      setName('');
+      setPrice('');
+      setImage(null);
+  
+      // Ürünleri tekrar getir
+      fetchProducts();
     } catch (error) {
-      alert('Sunucu hatası.');
-      console.error(error);
+      console.error("Ürün ekleme hatası:", error);
     }
   };
-
+  
   return (
     <main className="p-10">
       <h1 className="text-3xl font-bold mb-6">Ürün Yönetimi</h1>
