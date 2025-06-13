@@ -15,13 +15,19 @@ export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
   const [cart, setCart] = useState<Product[]>([]);
 
-  const API_URL = 'https://backend-api-rvzd.onrender.com/products';
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      setProducts(data);
+      try {
+        await fetch(BASE_URL); // 🔥 Render'ı uyandır
+        const res = await fetch(`${BASE_URL}/products`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("❌ HATA:", JSON.stringify(error, null, 2));
+      }
+      
     };
 
     fetchProducts();
@@ -44,27 +50,25 @@ export default function StorePage() {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md p-6">
-  <h2 className="text-2xl font-bold mb-6 text-gray-900 border-b border-gray-300 pb-2">
-    Kategoriler
-  </h2>
-  <ul className="space-y-3">
-    {categories.map((cat) => (
-      <li
-        key={cat}
-        className={`cursor-pointer px-3 py-2 rounded-lg transition-colors duration-300
-          ${
-            selectedCategory === cat
-              ? 'bg-green-700 text-white font-semibold shadow'
-              : 'text-gray-800 hover:bg-green-200 hover:text-green-900'
-          }`}
-        onClick={() => setSelectedCategory(cat)}
-      >
-        {cat}
-      </li>
-    ))}
-  </ul>
-</aside>
-
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 border-b border-gray-300 pb-2">
+          Kategoriler
+        </h2>
+        <ul className="space-y-3">
+          {categories.map((cat) => (
+            <li
+              key={cat}
+              className={`cursor-pointer px-3 py-2 rounded-lg transition-colors duration-300 ${
+                selectedCategory === cat
+                  ? 'bg-green-700 text-white font-semibold shadow'
+                  : 'text-gray-800 hover:bg-green-200 hover:text-green-900'
+              }`}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </li>
+          ))}
+        </ul>
+      </aside>
 
       {/* Ana içerik */}
       <main className="flex-1 p-10 bg-gradient-to-br from-white to-yellow-50">
@@ -95,36 +99,33 @@ export default function StorePage() {
 
         {/* Ürün Listesi */}
         <section className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
-          {filteredProducts.map((p) => {
-            const imgSrc = p.imageUrl?.startsWith('/uploads')
-              ? `http://localhost:3500${p.imageUrl}`
-              : p.imageUrl
-              ? `http://localhost:3500/uploads/${p.imageUrl}`
-              : '';
+        {filteredProducts.map((p) => {
+  const imgSrc = p.imageUrl || '';
 
-            return (
-              <div
-                key={p.id}
-                className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer"
-              >
-                {imgSrc && (
-                  <img
-                    src={imgSrc}
-                    alt={p.name}
-                    className="w-full h-44 object-cover rounded mb-4"
-                  />
-                )}
-                <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
-                <p className="text-gray-600 mb-2">{p.price.toFixed(2)} ₺</p>
-                <button
-                  onClick={() => addToCart(p)}
-                  className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 w-full"
-                >
-                  Sepete Ekle
-                </button>
-              </div>
-            );
-          })}
+  return (
+    <div
+      key={p.id}
+      className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+    >
+      {imgSrc && (
+        <img
+          src={imgSrc}
+          alt={p.name}
+          className="w-full h-44 object-cover rounded mb-4"
+        />
+      )}
+      <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
+      <p className="text-gray-600 mb-2">{p.price.toFixed(2)} ₺</p>
+      <button
+        onClick={() => addToCart(p)}
+        className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 w-full"
+      >
+        Sepete Ekle
+      </button>
+    </div>
+  );
+})}
+
         </section>
       </main>
     </div>
