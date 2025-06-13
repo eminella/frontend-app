@@ -93,15 +93,13 @@ export default function AdminPage() {
 
   {/* 📸 BURAYA EKLE */}
   <input
-    id="imageInput"
-    type="file"
-    accept="image/*"
-    onChange={(e) => {
-      if (e.target.files && e.target.files[0]) {
-        setImage(e.target.files[0]);
-      }
-    }}
-  />
+  id="imageInput"
+  type="file"
+  accept="image/*"
+  onChange={(e) => setImage(e.target.files?.[0] || null)}
+  className="border p-2 w-full"
+/>
+
 
   <button type="submit">Kaydet</button>
 </form>
