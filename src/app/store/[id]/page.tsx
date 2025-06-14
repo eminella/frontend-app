@@ -8,8 +8,10 @@ type Product = {
   imageUrl?: string;
 };
 
+// ✅ ENV desteği
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
+// ✅ Ürünü fetch eden yardımcı fonksiyon
 async function getProduct(id: string): Promise<Product | null> {
   try {
     const res = await fetch(`${BASE_URL}/products/${id}`, { cache: 'no-store' });
@@ -20,9 +22,14 @@ async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
-// ✅ FARK: PageProps değil, Props kullandık
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = await getProduct(params.id);
+// ✅ Promise çözümlemeli props
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params; // 🔥 burada destructure ediyoruz
+  const product = await getProduct(id);
 
   if (!product) return notFound();
 
