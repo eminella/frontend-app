@@ -1,6 +1,4 @@
 import { notFound } from 'next/navigation';
-import { useCart } from "../../../../context/CartContext";
-import React from 'react';
 
 type Product = {
   id: number;
@@ -8,12 +6,6 @@ type Product = {
   price: number;
   category: string;
   imageUrl?: string;
-};
-
-type PageProps = {
-  params: {
-    id: string;
-  };
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
@@ -28,7 +20,11 @@ async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
-export default async function ProductPage({ params }: PageProps) {
+export default async function ProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const product = await getProduct(params.id);
 
   if (!product) return notFound();
@@ -43,7 +39,6 @@ export default async function ProductPage({ params }: PageProps) {
       <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
       <p className="text-lg text-gray-700 mb-4">{product.price} ₺</p>
 
-      {/* Sepet sistemi aktifse buton aktifleşir */}
       <button className="w-full p-3 bg-green-600 text-white rounded">
         Sepete Ekle
       </button>
