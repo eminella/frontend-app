@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 type Product = {
   id: number;
@@ -26,21 +27,21 @@ export default function StorePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        await fetch(BASE_URL); // Render'ı uyandır
+        await fetch(BASE_URL);
         const res = await fetch(`${BASE_URL}/products`);
         const data = await res.json();
-        console.log("🟢 Gelen veri:", data);
         setProducts(data);
       } catch (error) {
-        console.error('Backend bağlantı hatası:', error);
+        console.error('❌ Backend bağlantı hatası:', error);
       }
     };
     fetchProducts();
   }, []);
 
-  const filteredProducts = selectedCategory === 'Tümü'
-    ? products
-    : products.filter((p) => p.category === selectedCategory);
+  const filteredProducts =
+    selectedCategory === 'Tümü'
+      ? products
+      : products.filter((p) => p.category === selectedCategory);
 
   const addToCart = (product: Product) => {
     setCart((prev) => {
@@ -66,12 +67,9 @@ export default function StorePage() {
     );
   };
 
-  const clearCart = () => {
-    setCart([]);
-  };
+  const clearCart = () => setCart([]);
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   const taxRate = 0.18;
   const totalPriceWithTax = totalPrice + totalPrice * taxRate;
 
@@ -85,7 +83,6 @@ export default function StorePage() {
       return;
     }
 
-    const productIds = cart.map((item) => item.id);
     const items = cart.map((item) => ({ productId: item.id, quantity: item.quantity }));
 
     try {
@@ -98,22 +95,21 @@ export default function StorePage() {
           phone,
           items,
           totalAmount: totalPriceWithTax,
-          productIds,
         }),
       });
 
       if (res.ok) {
-        alert('Sipariş başarıyla oluşturuldu!');
+        alert('✅ Sipariş başarıyla oluşturuldu!');
         clearCart();
         setCustomerName('');
         setAddress('');
         setPhone('');
       } else {
-        alert('Sipariş oluşturulamadı!');
+        alert('❌ Sipariş oluşturulamadı!');
       }
     } catch (error) {
-      alert('Sunucu hatası!');
-      console.error('Sipariş oluşturma hatası:', error);
+      alert('🚫 Sunucu hatası!');
+      console.error(error);
     }
   };
 
@@ -121,121 +117,100 @@ export default function StorePage() {
     <main className="p-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Mağaza</h1>
 
-      <div className="mb-6 overflow-x-auto">
-  <div className="flex gap-3 w-max min-w-full">
-    {categories.map((cat) => (
-      <button
-        key={cat}
-        onClick={() => setSelectedCategory(cat)}
-        className={`whitespace-nowrap px-4 py-2 rounded ${
-          selectedCategory === cat ? 'bg-green-600 text-white' : 'bg-gray-200'
-        }`}
-      >
-        {cat}
-      </button>
-    ))}
-  </div>
-</div>
-
-
-      {filteredProducts.length === 0 && <p>Bu kategoride ürün bulunamadı.</p>}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-        {Array.isArray(filteredProducts) && filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="border rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all"
-          >
-            {product.imageUrl && (
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="w-full h-56 object-cover"
-              />
-            )}
-            <div className="p-4">
-              <h2 className="text-lg font-semibold">{product.name}</h2>
-              <p className="text-blue-600 font-bold mt-1">{product.price.toFixed(2)} TL</p>
-              <button
-                onClick={() => addToCart(product)}
-                className="mt-3 bg-green-600 text-white px-4 py-1 rounded"
-              >
-                Sepete Ekle
-              </button>
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Kategori & Sepet */}
+        <aside className="w-full md:w-1/4 space-y-6">
+          {/* Kategoriler */}
+          <div className="overflow-x-auto">
+            <div className="flex gap-2 w-max min-w-full">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`whitespace-nowrap px-4 py-2 rounded ${
+                    selectedCategory === cat
+                      ? 'bg-green-600 text-white'
+                      : 'bg-gray-200'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
 
-      <div className="bg-gray-100 p-4 rounded-xl mb-6">
-        <h2 className="text-2xl font-semibold mb-4">🛒 Sepet ({totalQuantity} ürün)</h2>
-        {cart.length === 0 ? (
-          <p className="text-gray-500">Sepetiniz boş.</p>
-        ) : (
-          <>
-            <ul className="space-y-4">
-              {cart.map((item) => (
-                <li key={item.id} className="flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                    {item.imageUrl && (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                    )}
+          {/* Sepet */}
+          <div className="bg-yellow-50 p-4 rounded-xl shadow-md">
+            <h2 className="text-lg font-bold mb-2">🛒 Sepet ({cart.length})</h2>
+            {cart.length === 0 ? (
+              <p>Sepetiniz boş.</p>
+            ) : (
+              <ul className="space-y-2">
+                {cart.map((item) => (
+                  <li key={item.id} className="flex justify-between items-center">
                     <div>
-                      <p className="font-bold">{item.name}</p>
-                      <p>
-                        {item.price.toFixed(2)} TL x {item.quantity}
-                      </p>
+                      <p className="font-semibold">{item.name}</p>
+                      <p className="text-sm">{item.price} ₺ x {item.quantity}</p>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min={1}
-                      value={item.quantity}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value);
-                        if (!isNaN(val)) updateQuantity(item.id, val);
-                      }}
-                      className="w-16 text-center border rounded"
-                    />
-                    <button
-                      onClick={() => removeFromCart(item.id)}
-                      className="bg-red-500 text-white px-2 rounded"
-                      title="Ürünü kaldır"
-                    >
-                      ×
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        min={1}
+                        value={item.quantity}
+                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                        className="w-14 text-center border rounded"
+                      />
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="bg-red-500 text-white px-2 rounded"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </aside>
 
-            <div className="mt-4 text-right">
-              <p className="font-semibold">Ara Toplam: {totalPrice.toFixed(2)} TL</p>
-              <p className="font-semibold">KDV (%18): {(totalPrice * taxRate).toFixed(2)} TL</p>
-              <p className="text-xl font-bold">Genel Toplam: {totalPriceWithTax.toFixed(2)} TL</p>
-            </div>
-
-            <div className="mt-4 flex justify-between">
-              <button
-                onClick={clearCart}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+        {/* Ürünler */}
+        <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredProducts.length === 0 ? (
+            <p className="col-span-full text-center text-gray-500">
+              Bu kategoride ürün bulunamadı.
+            </p>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="border rounded-xl p-4 shadow hover:shadow-md transition"
               >
-                Sepeti Boşalt
-              </button>
-            </div>
-          </>
-        )}
+                <Link href={`/store/${product.id}`}>
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="w-full h-48 object-cover rounded"
+                  />
+                  <h3 className="mt-2 font-semibold">{product.name}</h3>
+                  <p className="text-gray-700">{product.price} ₺</p>
+                </Link>
+                <button
+                  onClick={() => addToCart(product)}
+                  className="w-full mt-2 p-2 bg-green-600 text-white rounded"
+                >
+                  Sepete Ekle
+                </button>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
+      {/* Müşteri Bilgileri */}
       {cart.length > 0 && (
-        <div className="p-4 border rounded-md bg-white shadow max-w-md mx-auto">
-          <h3 className="text-xl font-semibold mb-4">Müşteri Bilgileri</h3>
-
+        <div className="mt-10 max-w-xl mx-auto bg-white p-6 rounded-xl shadow">
+          <h2 className="text-xl font-bold mb-4">Müşteri Bilgileri</h2>
           <input
             type="text"
             placeholder="Ad Soyad"
@@ -243,7 +218,6 @@ export default function StorePage() {
             onChange={(e) => setCustomerName(e.target.value)}
             className="w-full mb-2 p-2 border rounded"
           />
-
           <input
             type="text"
             placeholder="Adres"
@@ -251,7 +225,6 @@ export default function StorePage() {
             onChange={(e) => setAddress(e.target.value)}
             className="w-full mb-2 p-2 border rounded"
           />
-
           <input
             type="tel"
             placeholder="Telefon"
@@ -260,17 +233,20 @@ export default function StorePage() {
             className="w-full mb-4 p-2 border rounded"
           />
 
+          <div className="text-right font-semibold mb-4">
+            <p>Ara Toplam: {totalPrice.toFixed(2)} ₺</p>
+            <p>KDV (%18): {(totalPrice * taxRate).toFixed(2)} ₺</p>
+            <p className="text-xl font-bold">Toplam: {totalPriceWithTax.toFixed(2)} ₺</p>
+          </div>
+
           <button
             onClick={handleOrder}
             className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
           >
-            🛒 Siparişi Tamamla
+            Siparişi Tamamla
           </button>
         </div>
       )}
-
-      {/* DEBUG: Sepet içeriği */}
-      <pre>{JSON.stringify(cart, null, 2)}</pre>
     </main>
   );
 }
