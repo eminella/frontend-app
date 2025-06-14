@@ -1,52 +1,31 @@
-type Params = { id: string };
+// /src/app/store/[id]/page.tsx
 
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  imageUrl?: string;
+type PageProps = {
+  params: { id: string }
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
+export default async function Page({ params }: PageProps) {
+  // Eğer params bir Promise ise, çözülmesini bekle
+  // Next.js 15+'da bazen Promise olabiliyor!
+  const realParams = await (params as any);
 
-// Ürün çekme fonksiyonu
-async function getProduct(id: string): Promise<Product | null> {
-  try {
-    const res = await fetch(`${BASE_URL}/products/${id}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
-}
+  const id = realParams?.id || params.id;
 
-// Next.js 15+ uyumlu dinamik route fonksiyonu
-export default async function Page({ params }: { params: Params }) {
-  // Next.js 15+ için parametreyi await ile çekiyoruz!
-  const { id } = await params;
+  // Burada API'den ürünü çekiyorsun (örnek)
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
+  // const product = await res.json();
 
-  const product = await getProduct(id);
-
-  if (!product) {
-    // 404 için:
-    return <div>Ürün bulunamadı.</div>;
-  }
+  // Fake örnek:
+  const product = {
+    name: "Deneme Ürün",
+    price: 199,
+  };
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-6">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="w-full h-64 sm:h-80 object-cover rounded-xl shadow mb-6"
-      />
-
+    <main>
       <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
       <p className="text-xl text-green-700 font-semibold mb-4">{product.price} ₺</p>
-      <p className="text-gray-600 mb-6">
-        Bu ürün yüksek kalite malzemelerle üretilmiştir. Siparişleriniz aynı gün kargoya verilir.
-      </p>
-
+      <p className="text-gray-600 mb-6">Bu ürün yüksek kalite malzemelerle üretilmiştir.</p>
       <button className="w-full p-3 bg-green-600 text-white rounded hover:bg-green-700">
         Sepete Ekle
       </button>
