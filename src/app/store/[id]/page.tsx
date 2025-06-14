@@ -1,15 +1,14 @@
-// src/app/store/[id]/page.tsx
+export default async function Page(
+  props: { params: Promise<{ id: string }> }
+) {
+  const params = await props.params;
+  const id = params.id;
 
-type ParamsType = { id: string };
-
-export default async function Page({ params }: { params: Promise<ParamsType> }) {
-  const { id } = await params;
-
-  // API'den ürün çek
+  // Burada artık id ile istediğini yapabilirsin.
   // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
   // const product = await res.json();
 
-  // Demo ürün
+  // Demo ürün:
   const product = { name: "Deneme Ürün", price: 199 };
 
   return (
