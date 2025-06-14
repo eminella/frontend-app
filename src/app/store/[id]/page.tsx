@@ -8,13 +8,6 @@ type Product = {
   imageUrl?: string;
 };
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
 async function getProduct(id: string): Promise<Product | null> {
@@ -27,7 +20,8 @@ async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
-export default async function ProductPage({ params }: PageProps) {
+// ✅ FARK: PageProps değil, Props kullandık
+export default async function ProductPage({ params }: { params: { id: string } }) {
   const product = await getProduct(params.id);
 
   if (!product) return notFound();
