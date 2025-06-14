@@ -27,7 +27,7 @@ export default function StorePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        await fetch(BASE_URL); // Render uyanması için
+        await fetch(BASE_URL);
         const res = await fetch(`${BASE_URL}/products`);
         const data = await res.json();
         setProducts(data);
@@ -118,9 +118,8 @@ export default function StorePage() {
       <h1 className="text-3xl font-bold mb-6">Mağaza</h1>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Kategori ve Sepet */}
-        <aside className="w-full md:w-1/4 space-y-6">
-          {/* Kategoriler */}
+        {/* Kategoriler (Sol) */}
+        <aside className="w-full md:w-1/4 space-y-6 order-1 md:order-none">
           <div className="overflow-x-auto">
             <div className="flex gap-2 w-max min-w-full">
               {categories.map((cat) => (
@@ -138,8 +137,42 @@ export default function StorePage() {
               ))}
             </div>
           </div>
+        </aside>
 
-          {/* Sepet */}
+        {/* Ürünler (Orta) */}
+        <div className="w-full md:w-2/4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {filteredProducts.length === 0 ? (
+            <p className="col-span-full text-center text-gray-500">
+              Bu kategoride ürün bulunamadı.
+            </p>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="border rounded-xl p-4 shadow hover:shadow-md transition"
+              >
+                <Link href={`/store/${product.id}`}>
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="w-full h-48 object-cover rounded"
+                  />
+                  <h3 className="mt-2 font-semibold">{product.name}</h3>
+                  <p className="text-gray-700">{product.price} ₺</p>
+                </Link>
+                <button
+                  onClick={() => addToCart(product)}
+                  className="w-full mt-2 p-2 bg-green-600 text-white rounded"
+                >
+                  Sepete Ekle
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Sepet (Sağ) */}
+        <aside className="w-full md:w-1/4 space-y-6 order-0 md:order-last">
           <div className="bg-yellow-50 p-4 rounded-xl shadow-md">
             <h2 className="text-lg font-bold mb-2">🛒 Sepet ({cart.length})</h2>
             {cart.length === 0 ? (
@@ -173,41 +206,9 @@ export default function StorePage() {
             )}
           </div>
         </aside>
-
-        {/* Ürünler */}
-        <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProducts.length === 0 ? (
-            <p className="col-span-full text-center text-gray-500">
-              Bu kategoride ürün bulunamadı.
-            </p>
-          ) : (
-            filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="border rounded-xl p-4 shadow hover:shadow-md transition"
-              >
-                <Link href={`/store/${product.id}`}>
-                  <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="w-full h-48 object-cover rounded"
-                  />
-                  <h3 className="mt-2 font-semibold">{product.name}</h3>
-                  <p className="text-gray-700">{product.price} ₺</p>
-                </Link>
-                <button
-                  onClick={() => addToCart(product)}
-                  className="w-full mt-2 p-2 bg-green-600 text-white rounded"
-                >
-                  Sepete Ekle
-                </button>
-              </div>
-            ))
-          )}
-        </div>
       </div>
 
-      {/* Müşteri Bilgileri ve Sipariş */}
+      {/* Sipariş Formu */}
       {cart.length > 0 && (
         <div className="mt-10 max-w-xl mx-auto bg-white p-6 rounded-xl shadow">
           <h2 className="text-xl font-bold mb-4">Müşteri Bilgileri</h2>
