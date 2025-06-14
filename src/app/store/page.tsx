@@ -21,15 +21,15 @@ export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState('Tümü');
 
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
-
   const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        await fetch(BASE_URL);
+        await fetch(BASE_URL); // Render'ı uyandır
         const res = await fetch(`${BASE_URL}/products`);
         const data = await res.json();
+        console.log("🟢 Gelen veri:", data);
         setProducts(data);
       } catch (error) {
         console.error('Backend bağlantı hatası:', error);
@@ -138,7 +138,7 @@ export default function StorePage() {
       {filteredProducts.length === 0 && <p>Bu kategoride ürün bulunamadı.</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-        {filteredProducts.map((product) => (
+        {Array.isArray(filteredProducts) && filteredProducts.map((product) => (
           <div
             key={product.id}
             className="border rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all"
