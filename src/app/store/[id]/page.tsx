@@ -8,11 +8,12 @@ type Product = {
   imageUrl?: string;
 };
 
-type PageProps = {
+interface PageProps {
   params: {
     id: string;
   };
-};
+}
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
