@@ -20,14 +20,15 @@ async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
-type ProductPageProps = {
+interface ProductPageProps {
   params: {
     id: string;
   };
-};
+}
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.id);
+export default async function ProductPage(props: ProductPageProps) {
+  const { id } = props.params;
+  const product = await getProduct(id);
 
   if (!product) return notFound();
 
