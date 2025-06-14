@@ -121,19 +121,22 @@ export default function StorePage() {
     <main className="p-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Mağaza</h1>
 
-      <div className="mb-6 flex gap-3">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded ${
-              selectedCategory === cat ? 'bg-green-600 text-white' : 'bg-gray-200'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      <div className="mb-6 overflow-x-auto">
+  <div className="flex gap-3 w-max min-w-full">
+    {categories.map((cat) => (
+      <button
+        key={cat}
+        onClick={() => setSelectedCategory(cat)}
+        className={`whitespace-nowrap px-4 py-2 rounded ${
+          selectedCategory === cat ? 'bg-green-600 text-white' : 'bg-gray-200'
+        }`}
+      >
+        {cat}
+      </button>
+    ))}
+  </div>
+</div>
+
 
       {filteredProducts.length === 0 && <p>Bu kategoride ürün bulunamadı.</p>}
 
