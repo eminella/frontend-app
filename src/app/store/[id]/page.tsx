@@ -11,9 +11,12 @@ type Product = {
 // ✅ ENV desteği
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
-// ✅ Ürünü fetch eden yardımcı fonksiyon
+// ✅ Ürünü fetch eden yardımcı fonksiyon (wake up fix eklendi)
 async function getProduct(id: string): Promise<Product | null> {
   try {
+    // 🔥 Render backend'i uyandırmak için ping
+    await fetch(BASE_URL);
+
     const res = await fetch(`${BASE_URL}/products/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
@@ -28,7 +31,7 @@ export default async function ProductPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params; // 🔥 burada destructure ediyoruz
+  const { id } = await params;
   const product = await getProduct(id);
 
   if (!product) return notFound();
