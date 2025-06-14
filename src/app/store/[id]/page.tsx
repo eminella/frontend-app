@@ -3,8 +3,7 @@
 type Params = { id: string };
 
 // Artık sadece Promise bekliyor!
-export default async function Page({ params }: { params: Params }) {
-  // Next.js 15+ için artık params Promise olarak geliyor
+export default async function Page({ params }: any) {
   const { id } = await params;
 
   // Burada ürünü API'dan çekebilirsin
