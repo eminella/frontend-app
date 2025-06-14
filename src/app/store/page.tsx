@@ -27,7 +27,7 @@ export default function StorePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        await fetch(BASE_URL);
+        await fetch(BASE_URL); // Render uyanması için
         const res = await fetch(`${BASE_URL}/products`);
         const data = await res.json();
         setProducts(data);
@@ -118,7 +118,7 @@ export default function StorePage() {
       <h1 className="text-3xl font-bold mb-6">Mağaza</h1>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Kategori & Sepet */}
+        {/* Kategori ve Sepet */}
         <aside className="w-full md:w-1/4 space-y-6">
           {/* Kategoriler */}
           <div className="overflow-x-auto">
@@ -207,7 +207,7 @@ export default function StorePage() {
         </div>
       </div>
 
-      {/* Müşteri Bilgileri */}
+      {/* Müşteri Bilgileri ve Sipariş */}
       {cart.length > 0 && (
         <div className="mt-10 max-w-xl mx-auto bg-white p-6 rounded-xl shadow">
           <h2 className="text-xl font-bold mb-4">Müşteri Bilgileri</h2>
