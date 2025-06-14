@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+type Params = { id: string };
 
 type Product = {
   id: number;
@@ -8,29 +8,30 @@ type Product = {
   imageUrl?: string;
 };
 
-// API URL'n otomatik gelsin, yoksa localhost'u kullan
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
-// Ürün detayını çek
+// Ürün çekme fonksiyonu
 async function getProduct(id: string): Promise<Product | null> {
   try {
     const res = await fetch(`${BASE_URL}/products/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
-  } catch (err) {
+  } catch {
     return null;
   }
 }
 
-// Next.js 13+ uyumlu Page component'i
-interface PageProps {
-  params: { id: string };
-}
+// Next.js 15+ uyumlu dinamik route fonksiyonu
+export default async function Page({ params }: { params: Params }) {
+  // Next.js 15+ için parametreyi await ile çekiyoruz!
+  const { id } = await params;
 
-export default async function Page({ params }: PageProps) {
-  const product = await getProduct(params.id);
+  const product = await getProduct(id);
 
-  if (!product) return notFound();
+  if (!product) {
+    // 404 için:
+    return <div>Ürün bulunamadı.</div>;
+  }
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-6">
@@ -42,7 +43,6 @@ export default async function Page({ params }: PageProps) {
 
       <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
       <p className="text-xl text-green-700 font-semibold mb-4">{product.price} ₺</p>
-
       <p className="text-gray-600 mb-6">
         Bu ürün yüksek kalite malzemelerle üretilmiştir. Siparişleriniz aynı gün kargoya verilir.
       </p>
