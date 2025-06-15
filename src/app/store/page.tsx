@@ -69,7 +69,8 @@ export default function StorePage() {
         src={p.imageUrl || "/default-product.jpg"}
         alt={p.name}
         className="w-full h-44 object-cover rounded mb-4"
-      />
+            />
+             <p style={{ fontSize: "12px", color: "gray" }}>v0.3.0 - canlı test</p>
       <h2 className="text-lg font-bold text-gray-800 mb-1 line-clamp-2">{p.name}</h2>
       <p className="text-yellow-700 font-bold text-lg mb-2">{p.price.toFixed(2)} ₺</p>
     </div>
