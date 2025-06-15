@@ -1,4 +1,8 @@
+export const dynamic = "force-dynamic";
 import { useEffect, useState } from 'react';
+
+// ... geri kalan kodun aynı
+
 
 type Product = {
   id: number;
