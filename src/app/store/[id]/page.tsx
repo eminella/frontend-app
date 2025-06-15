@@ -1,13 +1,15 @@
+// src/app/store/[id]/page.tsx
+
 type Params = { id: string };
 
 export default async function ProductDetailPage({ params }: { params: Params }) {
   const { id } = params;
 
-  // İstersen gerçek API'den ürün detayını fetch et:
+  // Burada API çağrısı yapabilirsin, örnek:
   // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, { cache: 'no-store' });
   // const product = await res.json();
 
-  // Şimdilik demo ürün
+  // Demo ürün
   const product = { name: "Deneme Ürün", price: 199, description: "Bu ürün çok kaliteli." };
 
   return (
