@@ -91,7 +91,7 @@ export default function AdminPage() {
     placeholder="Fiyat"
   />
 
-  {/* 📸 BURAYA EKLE */}
+  {/* 📸 BURAYA EKLE **/}
   <input
   id="imageInput"
   type="file"
