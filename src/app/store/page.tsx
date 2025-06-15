@@ -1,8 +1,7 @@
-export const dynamic = "force-dynamic";
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-// ... geri kalan kodun aynı
-
+// Bu sayfa şimdi tamamen server-rendered olacak
+export const dynamic = 'force-dynamic'; // Yine dursun ama artık fetch serverda
 
 type Product = {
   id: number;
@@ -10,57 +9,42 @@ type Product = {
   price: number;
   category: string;
   imageUrl?: string;
-  externalUrl?: string; // Trendyol linki gibi dış link için
+  externalUrl?: string;
 };
 
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
-export default function StorePage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('Tümü');
-
+export default async function StorePage() {
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`${BASE_URL}/products`);
-        const data = await res.json();
-        setProducts(data);
-      } catch (error) {
-        console.error('❌ HATA:', error);
-      }
-    };
-    fetchProducts();
-  }, []);
+  let products: Product[] = [];
 
-  const filteredProducts =
-    selectedCategory === 'Tümü'
-      ? products
-      : products.filter((p) => p.category === selectedCategory);
+  try {
+    const res = await fetch(`${BASE_URL}/products`, {
+      cache: 'no-store', // 🔥 static cache'i kesin olarak kapatır
+    });
+    products = await res.json();
+  } catch (err) {
+    console.error('❌ Ürünler getirilemedi:', err);
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
       {/* Kategoriler */}
       <div className="flex gap-2 mb-8 flex-wrap justify-center">
         {categories.map((cat) => (
-          <button
+          <div
             key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded text-sm font-semibold transition-all ${
-              selectedCategory === cat
-                ? 'bg-yellow-700 text-white shadow'
-                : 'bg-gray-100 text-gray-700 hover:bg-yellow-100'
-            }`}
+            className="px-4 py-2 rounded text-sm font-semibold transition-all bg-yellow-700 text-white shadow"
           >
             {cat}
-          </button>
+          </div>
         ))}
       </div>
 
       {/* Ürünler */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
-        {filteredProducts.map((p) => (
+        {products.map((p) => (
           <a
             key={p.id}
             href={p.externalUrl || 'https://trendyol.com/'}
@@ -89,7 +73,7 @@ export default function StorePage() {
       {/* ✅ Versiyon etiketi - sadece 1 kez görünür */}
       <div className="text-center mt-10">
         <p style={{ fontSize: '12px', color: 'gray' }}>
-          v0.3.1 - son değişiklik deploy testi
+          v0.3.4 - manuel dinamik test ✅
         </p>
       </div>
     </main>
