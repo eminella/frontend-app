@@ -1,6 +1,6 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
 type Product = {
   id: number;
@@ -8,58 +8,79 @@ type Product = {
   price: number;
   category: string;
   imageUrl?: string;
+  externalUrl?: string;  // Trendyol vb. dış link için
 };
+
+const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
 export default function StorePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('Tümü');
+
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
-  const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch(`${BASE_URL}/products`);
-      const data = await res.json();
-      setProducts(data);
-    };
+    async function fetchProducts() {
+      try {
+        const res = await fetch(`${BASE_URL}/products`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('❌ HATA:', error);
+      }
+    }
     fetchProducts();
-  }, []);
+  }, [BASE_URL]);
 
-  const filteredProducts =
-    selectedCategory === 'Tümü'
-      ? products
-      : products.filter((p) => p.category === selectedCategory);
+  const filteredProducts = selectedCategory === 'Tümü'
+    ? products
+    : products.filter(p => p.category === selectedCategory);
 
   return (
-    <main className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Mağaza</h1>
-      <div className="flex gap-2 mb-4">
-        {categories.map((cat) => (
+    <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
+      <div className="flex gap-2 mb-8 flex-wrap justify-center">
+        {categories.map(cat => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded ${
-              selectedCategory === cat ? 'bg-green-600 text-white' : 'bg-gray-200'
+            className={`px-4 py-2 rounded text-sm font-semibold transition-all ${
+              selectedCategory === cat
+                ? 'bg-yellow-700 text-white shadow'
+                : 'bg-gray-100 text-gray-700 hover:bg-yellow-100'
             }`}
           >
             {cat}
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {filteredProducts.map((product) => (
-          <Link key={product.id} href={`/store/${product.id}`}>
-            <div className="border rounded-xl p-4 shadow hover:shadow-md transition">
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="w-full h-48 object-cover rounded"
-              />
-              <h3 className="mt-2 font-semibold">{product.name}</h3>
-              <p className="text-gray-700">{product.price} ₺</p>
-            </div>
-          </Link>
-        ))}
+
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
+        {filteredProducts.length === 0 ? (
+          <div className="col-span-full text-center text-gray-400 py-12">
+            Ürün bulunamadı.
+          </div>
+        ) : (
+          filteredProducts.map(p => (
+            <a
+              key={p.id}
+              href={p.externalUrl || 'https://trendyol.com/'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block group focus:outline-none"
+              tabIndex={0}
+            >
+              <div className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer group-hover:scale-105 h-full flex flex-col">
+                <img
+                  src={p.imageUrl || "/default-product.jpg"}
+                  alt={p.name}
+                  className="w-full h-44 object-cover rounded mb-4"
+                />
+                <h2 className="text-lg font-bold text-gray-800 mb-1 line-clamp-2">{p.name}</h2>
+                <p className="text-yellow-700 font-bold text-lg mb-2">{p.price.toFixed(2)} ₺</p>
+              </div>
+            </a>
+          ))
+        )}
       </div>
     </main>
   );

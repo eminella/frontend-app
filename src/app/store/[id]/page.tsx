@@ -1,20 +1,20 @@
-// src/app/store/[id]/page.tsx
+type Params = { id: string };
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function ProductDetailPage({ params }: { params: Params }) {
   const { id } = params;
 
-  // Örneğin: API'den veri çekmek için şöyle kullanabilirsin
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
+  // İstersen gerçek API'den ürün detayını fetch et:
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, { cache: 'no-store' });
   // const product = await res.json();
 
-  // Demo sabit ürün
-  const product = { name: "Deneme Ürün", price: 199 };
+  // Şimdilik demo ürün
+  const product = { name: "Deneme Ürün", price: 199, description: "Bu ürün çok kaliteli." };
 
   return (
-    <main>
-      <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-      <p className="text-xl text-green-700 font-semibold mb-4">{product.price} ₺</p>
-      <p className="text-gray-600 mb-6">Bu ürün yüksek kalite malzemelerle üretilmiştir.</p>
+    <main className="min-h-screen p-6 max-w-3xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+      <p className="text-xl text-yellow-700 font-semibold mb-6">{product.price} ₺</p>
+      <p className="mb-6 text-gray-700">{product.description}</p>
     </main>
   );
 }
