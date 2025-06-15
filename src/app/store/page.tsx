@@ -54,30 +54,34 @@ export default function StorePage() {
       </div>
 
       {/* Ürünler */}
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
-      {filteredProducts.map((p) => (
-  <a
-    key={p.id}
-    href={p.externalUrl || 'https://trendyol.com/'}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="block group focus:outline-none"
-    tabIndex={0}
-  >
-    <div className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer group-hover:scale-105 h-full flex flex-col">
-      <img
-        src={p.imageUrl || "/default-product.jpg"}
-        alt={p.name}
-        className="w-full h-44 object-cover rounded mb-4"
-            />
-             <p style={{ fontSize: "12px", color: "gray" }}>v0.3.0 - canlı test</p>
-      <h2 className="text-lg font-bold text-gray-800 mb-1 line-clamp-2">{p.name}</h2>
-      <p className="text-yellow-700 font-bold text-lg mb-2">{p.price.toFixed(2)} ₺</p>
-    </div>
-  </a>
-))}
-
+<div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
+  {filteredProducts.map((p) => (
+    <a
+      key={p.id}
+      href={p.externalUrl || 'https://trendyol.com/'}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block group focus:outline-none"
+      tabIndex={0}
+    >
+      <div className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer group-hover:scale-105 h-full flex flex-col">
+        <img
+          src={p.imageUrl || "/default-product.jpg"}
+          alt={p.name}
+          className="w-full h-44 object-cover rounded mb-4"
+        />
+        <h2 className="text-lg font-bold text-gray-800 mb-1 line-clamp-2">{p.name}</h2>
+        <p className="text-yellow-700 font-bold text-lg mb-2">{p.price.toFixed(2)} ₺</p>
       </div>
+    </a>
+  ))}
+</div>
+
+{/* ✅ Versiyon etiketi - sadece 1 kez görünür */}
+<div className="text-center mt-10">
+  <p style={{ fontSize: "12px", color: "gray" }}>v0.3.0 - canlı test</p>
+</div>
+
     </main>
   );
 }
