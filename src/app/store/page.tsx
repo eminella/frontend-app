@@ -1,7 +1,7 @@
+import Link from 'next/link'; // iç yönlendirme için
 import Image from 'next/image';
 
-// Bu sayfa şimdi tamamen server-rendered olacak
-export const dynamic = 'force-dynamic'; // Yine dursun ama artık fetch serverda
+export const dynamic = 'force-dynamic'; // server-rendered
 
 type Product = {
   id: number;
@@ -21,7 +21,7 @@ export default async function StorePage() {
 
   try {
     const res = await fetch(`${BASE_URL}/products`, {
-      cache: 'no-store', // 🔥 static cache'i kesin olarak kapatır
+      cache: 'no-store',
     });
     products = await res.json();
   } catch (err) {
@@ -45,13 +45,10 @@ export default async function StorePage() {
       {/* Ürünler */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
         {products.map((p) => (
-          <a
+          <Link
             key={p.id}
-            href={p.externalUrl || 'https://trendyol.com/'}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/store/${p.id}`} // dış link değil, detay sayfası
             className="block group focus:outline-none"
-            tabIndex={0}
           >
             <div className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer group-hover:scale-105 h-full flex flex-col">
               <img
@@ -66,11 +63,11 @@ export default async function StorePage() {
                 {p.price.toFixed(2)} ₺
               </p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
 
-      {/* ✅ Versiyon etiketi - sadece 1 kez görünür */}
+      {/* Versiyon etiketi */}
       <div className="text-center mt-10">
         <p style={{ fontSize: '12px', color: 'gray' }}>
           v0.3.4 - manuel dinamik test ✅

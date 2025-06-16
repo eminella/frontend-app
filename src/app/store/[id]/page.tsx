@@ -1,22 +1,45 @@
-// src/app/store/[id]/page.tsx
+// app/store/[id]/page.tsx
 
-type Params = { id: string };
+import { notFound } from 'next/navigation';
 
-export default async function ProductDetailPage({ params }: { params: Params }) {
-  const { id } = params;
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  imageUrl?: string;
+};
 
-  // Burada API çağrısı yapabilirsin, örnek:
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, { cache: 'no-store' });
-  // const product = await res.json();
+export default async function ProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
-  // Demo ürün
-  const product = { name: "Deneme Ürün", price: 199, description: "Bu ürün çok kaliteli." };
+  const res = await fetch(`${BASE_URL}/products/${params.id}`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) return notFound();
+
+  const product: Product = await res.json();
 
   return (
-    <main className="min-h-screen p-6 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-      <p className="text-xl text-yellow-700 font-semibold mb-6">{product.price} ₺</p>
-      <p className="mb-6 text-gray-700">{product.description}</p>
+    <main className="p-6 max-w-xl mx-auto">
+      <img
+        src={product.imageUrl || '/default-product.jpg'}
+        alt={product.name}
+        className="w-full h-64 object-cover rounded-xl mb-6"
+      />
+      <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+      <p className="text-xl text-yellow-700 font-semibold mb-4">
+        {product.price.toFixed(2)} ₺
+      </p>
+      <p className="text-gray-600">
+        Bu ürün yüksek kalite malzemelerle üretilmiştir. Kategori:{" "}
+        <span className="font-medium">{product.category}</span>
+      </p>
     </main>
   );
 }
