@@ -1,30 +1,29 @@
-// middleware.ts
-
+// frontend-app/middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Eğer istek tam köke geliyorsa
+  // Yalnızca tam köke gelen isteği yakala
   if (pathname === '/') {
     const url = req.nextUrl.clone()
     url.pathname = '/store'
     return NextResponse.redirect(url)
   }
 
-  // Eğer istek kökün altındaki numeric ID ise (/1, /42 vs)
+  // Eğer numeric ID geliyorsa (/1, /42)
   if (/^\/\d+$/.test(pathname)) {
     const url = req.nextUrl.clone()
     url.pathname = `/store${pathname}`
     return NextResponse.redirect(url)
   }
 
-  // Diğer tüm istekler normal devam etsin
+  // Diğer her isteğe dokunma
   return NextResponse.next()
 }
 
-// Yalnızca root ve '/:id' isteklerine eşle
+// Yalnızca root ve /:id isteklerini yakala
 export const config = {
-  matcher: ['/', '/:path*'],
+  matcher: ['/', '/:path(\\d+)'],
 }
