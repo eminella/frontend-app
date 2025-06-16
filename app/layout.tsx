@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 // 🟢 Sepet sistemi için context import
-import CartProvider from "../../context/CartContext";
+import CartProvider from "@/context/CartContext";
 
 // İstersen Google Fonts (ör: Roboto) kullan:
 import { Roboto } from "next/font/google";
