@@ -1,6 +1,6 @@
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     return (
-      <div className="flex min-h-screen font-sans">
+      <div className="flex min-h-screen font-sans text-gray-800">
         {/* Sol Menü */}
         <aside className="w-64 bg-gray-900 text-white flex flex-col p-6">
           <h2 className="text-2xl font-bold mb-8">Eminella</h2>
@@ -14,7 +14,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </aside>
   
         {/* Sağ İçerik */}
-        <main className="flex-1 bg-gray-100 p-10">{children}</main>
+        <main className="flex-1 bg-gray-100 p-10 text-gray-800">
+          {children}
+        </main>
       </div>
     );
   }
