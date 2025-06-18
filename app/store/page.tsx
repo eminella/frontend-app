@@ -29,6 +29,7 @@ export default function StorePage() {
       try {
         const res = await fetch(`${BASE_URL}/products`);
         const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Geçersiz ürün verisi');
         setProducts(data);
       } catch (err) {
         console.error('❌ Ürünler getirilemedi:', err);
@@ -78,10 +79,11 @@ export default function StorePage() {
     }
   };
 
-  const filteredProducts =
-    selectedCategory === 'Tümü'
+  const filteredProducts = Array.isArray(products)
+    ? selectedCategory === 'Tümü'
       ? products
-      : products.filter((p) => p.category === selectedCategory);
+      : products.filter((p) => p.category === selectedCategory)
+    : [];
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
@@ -110,9 +112,7 @@ export default function StorePage() {
             className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer hover:scale-105 h-full flex flex-col"
           >
             <Link href={`/store/${p.id}`}>
-              <h2 className="text-lg font-bold text-gray-800 mb-1">
-                {p.name}
-              </h2>
+              <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
               <p className="text-yellow-700 font-bold text-lg mb-2">
                 {p.price.toFixed(2)} ₺
               </p>
@@ -151,10 +151,7 @@ export default function StorePage() {
             <p className="font-semibold">
               Toplam:{' '}
               {cart
-                .reduce(
-                  (sum, item) => sum + item.price * item.quantity,
-                  0
-                )
+                .reduce((sum, item) => sum + item.price * item.quantity, 0)
                 .toFixed(2)}{' '}
               ₺
             </p>
