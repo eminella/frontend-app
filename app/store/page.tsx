@@ -1,11 +1,10 @@
+// frontend-app/src/app/store/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-
-// ...devam
 
 type Product = {
   id: number;
@@ -20,6 +19,8 @@ type CartItem = Product & { quantity: number };
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
 export default function StorePage() {
+  // .env.local'da şu satırın olduğundan emin ol:
+  // NEXT_PUBLIC_API_URL=https://backend-api-rvzd.onrender.com
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -29,7 +30,9 @@ export default function StorePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/products`);
+        // 👇 Burada /api/products ekledik
+        const res = await fetch(`${BASE_URL}/api/products`);
+        if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
         if (!Array.isArray(data)) throw new Error('Geçersiz ürün verisi');
         setProducts(data);
@@ -38,7 +41,7 @@ export default function StorePage() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [BASE_URL]);
 
   const addToCart = (product: Product) => {
     const existing = cart.find((item) => item.id === product.id);
@@ -62,16 +65,12 @@ export default function StorePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: cart,
-          totalAmount: cart.reduce(
-            (sum, item) => sum + item.price * item.quantity,
-            0
-          ),
+          totalAmount: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
           customerName: 'Deneme Müşteri',
           address: 'İstanbul',
           phone: '05555555555',
         }),
       });
-
       if (!res.ok) throw new Error('Sipariş oluşturulamadı!');
       alert('✅ Sipariş başarıyla alındı!');
       setCart([]);
@@ -81,11 +80,10 @@ export default function StorePage() {
     }
   };
 
-  const filteredProducts = Array.isArray(products)
-    ? selectedCategory === 'Tümü'
+  const filteredProducts =
+    selectedCategory === 'Tümü'
       ? products
-      : products.filter((p) => p.category === selectedCategory)
-    : [];
+      : products.filter((p) => p.category === selectedCategory);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
@@ -114,17 +112,16 @@ export default function StorePage() {
             className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer hover:scale-105 h-full flex flex-col"
           >
             <Link href={`/store/${p.id}`}>
-  <img
-    src={p.imageUrl}
-    alt={p.name}
-    className="w-full h-40 object-cover rounded-lg mb-2"
-  />
-  <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
-  <p className="text-yellow-700 font-bold text-lg mb-2">
-    {p.price.toFixed(2)} ₺
-  </p>
-</Link>
-
+              <img
+                src={p.imageUrl}
+                alt={p.name}
+                className="w-full h-40 object-cover rounded-lg mb-2"
+              />
+              <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
+              <p className="text-yellow-700 font-bold text-lg mb-2">
+                {p.price.toFixed(2)} ₺
+              </p>
+            </Link>
             <button
               onClick={() => addToCart(p)}
               className="mt-auto bg-yellow-700 text-white px-3 py-1 rounded-md text-sm"
@@ -147,9 +144,7 @@ export default function StorePage() {
                 <span>
                   {item.name} x {item.quantity}
                 </span>
-                <span>
-                  {(item.price * item.quantity).toFixed(2)} ₺
-                </span>
+                <span>{(item.price * item.quantity).toFixed(2)} ₺</span>
               </li>
             ))}
           </ul>
@@ -158,10 +153,7 @@ export default function StorePage() {
           <div className="mt-4">
             <p className="font-semibold">
               Toplam:{' '}
-              {cart
-                .reduce((sum, item) => sum + item.price * item.quantity, 0)
-                .toFixed(2)}{' '}
-              ₺
+              {cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)} ₺
             </p>
             <button
               onClick={handleCheckout}
