@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,56 +13,164 @@ type Product = {
   imageUrl?: string;
 };
 
+type CartItem = Product & { quantity: number };
+
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
-export default async function StorePage() {
+export default function StorePage() {
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
-  let products: Product[] = [];
+  const [products, setProducts] = useState<Product[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('Tümü');
 
-  try {
-    const res = await fetch(`${BASE_URL}/products`, {
-      cache: 'no-store',
-    });
-    products = await res.json();
-  } catch (err) {
-    console.error('❌ Ürünler getirilemedi:', err);
-  }
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/products`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error('❌ Ürünler getirilemedi:', err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const addToCart = (product: Product) => {
+    const existing = cart.find((item) => item.id === product.id);
+    if (existing) {
+      setCart(
+        cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart,
+          totalAmount: cart.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          ),
+          customerName: 'Deneme Müşteri',
+          address: 'İstanbul',
+          phone: '05555555555',
+        }),
+      });
+
+      if (!res.ok) throw new Error('Sipariş oluşturulamadı!');
+      alert('✅ Sipariş başarıyla alındı!');
+      setCart([]);
+    } catch (err) {
+      alert('❌ Sipariş başarısız oldu!');
+      console.error(err);
+    }
+  };
+
+  const filteredProducts =
+    selectedCategory === 'Tümü'
+      ? products
+      : products.filter((p) => p.category === selectedCategory);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
       {/* Kategoriler */}
       <div className="flex gap-2 mb-8 flex-wrap justify-center">
         {categories.map((cat) => (
-          <div
+          <button
             key={cat}
-            className="px-4 py-2 rounded text-sm font-semibold transition-all bg-yellow-700 text-white shadow"
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-4 py-2 rounded text-sm font-semibold transition-all shadow ${
+              selectedCategory === cat
+                ? 'bg-yellow-700 text-white'
+                : 'bg-yellow-100 text-yellow-800'
+            }`}
           >
             {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Ürünler */}
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        {filteredProducts.map((p) => (
+          <div
+            key={p.id}
+            className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer hover:scale-105 h-full flex flex-col"
+          >
+            <Link href={`/store/${p.id}`}>
+              <h2 className="text-lg font-bold text-gray-800 mb-1">
+                {p.name}
+              </h2>
+              <p className="text-yellow-700 font-bold text-lg mb-2">
+                {p.price.toFixed(2)} ₺
+              </p>
+            </Link>
+            <button
+              onClick={() => addToCart(p)}
+              className="mt-auto bg-yellow-700 text-white px-3 py-1 rounded-md text-sm"
+            >
+              Sepete Ekle
+            </button>
           </div>
         ))}
       </div>
 
-    {/* Ürünler */}
-<div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 max-w-7xl mx-auto">
-  {products.map((p) => (
-    <Link key={p.id} href={`/store/${p.id}`}>
-      <div className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer hover:scale-105 h-full flex flex-col">
--       <h2 className="text-lg font-bold text-gray-800 mb-1 line-clamp-2">{p.name}</h2>
-+       <h2 className="text-lg font-bold text-gray-800 mb-1">
-+         [{p.id}] {p.name}
-+       </h2>
-        <p className="text-yellow-700 font-bold text-lg mb-2">
-          {p.price.toFixed(2)} ₺
-        </p>
+      {/* Sepet */}
+      <div className="bg-white rounded-xl shadow p-4 mt-10 max-w-2xl mx-auto">
+        <h3 className="text-lg font-bold mb-2">🛒 Sepet</h3>
+        {cart.length === 0 ? (
+          <p className="text-gray-500">Sepet boş</p>
+        ) : (
+          <ul className="space-y-2">
+            {cart.map((item) => (
+              <li key={item.id} className="flex justify-between">
+                <span>
+                  {item.name} x {item.quantity}
+                </span>
+                <span>
+                  {(item.price * item.quantity).toFixed(2)} ₺
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {cart.length > 0 && (
+          <div className="mt-4">
+            <p className="font-semibold">
+              Toplam:{' '}
+              {cart
+                .reduce(
+                  (sum, item) => sum + item.price * item.quantity,
+                  0
+                )
+                .toFixed(2)}{' '}
+              ₺
+            </p>
+            <button
+              onClick={handleCheckout}
+              className="mt-2 bg-green-600 text-white px-4 py-2 rounded-md w-full"
+            >
+              Siparişi Tamamla
+            </button>
+          </div>
+        )}
       </div>
-    </Link>
-  ))}
-</div>
 
       {/* Versiyon etiketi */}
       <div className="text-center mt-10">
-        <p className="text-xs text-gray-400">v0.3.4 - detay yönlendirme aktif</p>
+        <p className="text-xs text-gray-400">v0.3.5 - sepet ve sipariş aktif</p>
       </div>
     </main>
   );
