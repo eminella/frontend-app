@@ -1,4 +1,6 @@
 // frontend-app/app/cart/page.tsx
+
+export const dynamic = "force-dynamic";
 'use client';
 
 export default function CartPage() {
