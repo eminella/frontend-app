@@ -1,7 +1,9 @@
-// frontend-app/app/cart/page.tsx
-
-export const dynamic = "force-dynamic";
 'use client';
+
+export const dynamic = 'force-dynamic';
+
+// ...devam
+
 
 export default function CartPage() {
   return (
