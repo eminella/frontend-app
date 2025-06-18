@@ -112,11 +112,17 @@ export default function StorePage() {
             className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer hover:scale-105 h-full flex flex-col"
           >
             <Link href={`/store/${p.id}`}>
-              <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
-              <p className="text-yellow-700 font-bold text-lg mb-2">
-                {p.price.toFixed(2)} ₺
-              </p>
-            </Link>
+  <img
+    src={p.imageUrl}
+    alt={p.name}
+    className="w-full h-40 object-cover rounded-lg mb-2"
+  />
+  <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
+  <p className="text-yellow-700 font-bold text-lg mb-2">
+    {p.price.toFixed(2)} ₺
+  </p>
+</Link>
+
             <button
               onClick={() => addToCart(p)}
               className="mt-auto bg-yellow-700 text-white px-3 py-1 rounded-md text-sm"
