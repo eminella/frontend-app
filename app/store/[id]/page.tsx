@@ -1,9 +1,13 @@
+// frontend-app/src/app/store/[id]/page.tsx
 'use client';
 
 import { notFound } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import classNames from 'classnames';
+
+// .env.local dosyanızda şu satırın olduğundan emin olun:
+// NEXT_PUBLIC_API_URL=https://backend-api-rvzd.onrender.com
 
 type Product = {
   id: number;
@@ -25,13 +29,19 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await fetch(`${BASE_URL}/products/${params.id}`);
-      if (!res.ok) return notFound();
-      const data = await res.json();
-      setProduct(data);
+      try {
+        // /api ekleyerek doğru endpoint'i çağırıyoruz
+        const res = await fetch(`${BASE_URL}/api/products/${params.id}`);
+        if (!res.ok) return notFound();
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.error('❌ Ürün getirilemedi:', err);
+        notFound();
+      }
     };
     fetchProduct();
-  }, [params.id]);
+  }, [params.id, BASE_URL]);
 
   if (!product) return <div className="p-10 text-center text-gray-500">Ürün yükleniyor...</div>;
 
