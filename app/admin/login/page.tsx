@@ -18,25 +18,16 @@ export default function AdminLoginPage() {
       return;
     }
 
-    // Burada backend login API çağrısını yapabilirsin
-    /*
     const res = await fetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
+
     if (res.ok) {
       router.push('/admin');
     } else {
       alert('Giriş başarısız');
-    }
-    */
-
-    // Demo amaçlı basit kontrol:
-    if (email === 'admin@example.com' && password === '123456') {
-      router.push('/admin');
-    } else {
-      alert('Hatalı giriş bilgileri.');
     }
   };
 

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     cookies().set('admin-auth', 'true', {
       httpOnly: true,
       path: '/',
-      maxAge: 60 * 60 * 12,
+      maxAge: 60 * 60 * 12, // 12 saat
     });
     return NextResponse.json({ success: true });
   }
