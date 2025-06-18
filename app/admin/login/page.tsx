@@ -5,9 +5,6 @@ export const dynamic = 'force-dynamic';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// ...devam
-
-
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,14 +13,12 @@ export default function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basit doğrulama
     if (!email || !password) {
       alert('Lütfen tüm alanları doldurun.');
       return;
     }
 
-    // Burada gerçek backend login endpoint'inizi çağırın
-    // Örnek:
+    // Burada backend login API çağrısını yapabilirsin
     /*
     const res = await fetch('/api/admin/login', {
       method: 'POST',
@@ -37,7 +32,7 @@ export default function AdminLoginPage() {
     }
     */
 
-    // Şimdilik demo amaçlı:
+    // Demo amaçlı basit kontrol:
     if (email === 'admin@example.com' && password === '123456') {
       router.push('/admin');
     } else {
@@ -52,20 +47,22 @@ export default function AdminLoginPage() {
         className="bg-white rounded-lg shadow-md p-8 max-w-sm w-full"
       >
         <img src="/logo.png" alt="Admin Logo" className="mx-auto mb-6 w-24" />
-        <h2 className="text-2xl font-bold text-center mb-6">Yönetici Paneline Hoş geldiniz</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">
+          Yönetici Paneline Hoş geldiniz
+        </h2>
         <input
           type="email"
           placeholder="E-posta"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-3 mb-4 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <input
           type="password"
           placeholder="Şifre"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 mb-6 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-3 mb-6 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <button
           type="submit"
