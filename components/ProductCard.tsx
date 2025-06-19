@@ -1,4 +1,3 @@
-// frontend-app/components/ProductCard.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -25,47 +24,42 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [showModal, setShowModal] = useState(false);
 
   const handleClick = () => {
-    onAddToCart(id);
-    setAdded(true);
-    setShowModal(true);
+    onAddToCart(id);       // Sepete ekle
+    setAdded(true);        // Butonu kırmızı yap, ikonu göster
+    setShowModal(true);    // Modalı aç
   };
 
   const closeModal = () => {
-    setShowModal(false);
+    setShowModal(false);   // Modalı kapat
   };
 
   return (
-    <>
-      <div className="border rounded-2xl shadow p-4 flex flex-col h-full">
-        <div className="relative h-48 w-full mb-4">
-          {imageUrl ? (
-            <Image src={imageUrl} alt={name} fill className="object-contain" />
-          ) : (
-            <div className="bg-gray-100 h-full flex items-center justify-center">
-              <span className="text-gray-400">No Image</span>
-            </div>
-          )}
-        </div>
-
-        <h3 className="text-lg font-semibold mb-2">{name}</h3>
-        <p className="text-xl font-bold text-green-600 mb-4">
-          {price.toFixed(2)} ₺
-        </p>
-
-        <button
-          onClick={handleClick}
-          className={`mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 transition-all
-            ${added
-              ? 'bg-red-600 text-white shadow-lg'
-              : 'bg-white text-red-600 border border-red-600 hover:bg-red-50'}
-          `}
-        >
-          Sepete Ekle
-          {added && <ShoppingCart size={18} />}
-        </button>
+    <div className="border rounded-2xl shadow p-4 flex flex-col h-full relative">
+      <div className="relative h-48 w-full mb-4">
+        {imageUrl ? (
+          <Image src={imageUrl} alt={name} fill className="object-contain" />
+        ) : (
+          <div className="bg-gray-100 h-full flex items-center justify-center">
+            <span className="text-gray-400">No Image</span>
+          </div>
+        )}
       </div>
 
-      {/* ✅ Modal görünüyorsa göster */}
+      <h3 className="text-lg font-semibold mb-2">{name}</h3>
+      <p className="text-xl font-bold text-green-600 mb-4">{price.toFixed(2)} ₺</p>
+
+      <button
+        onClick={handleClick}
+        className={`mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 transition-all
+          ${added
+            ? 'bg-red-600 text-white shadow-lg'
+            : 'bg-white text-red-600 border border-red-600 hover:bg-red-50'}`}
+      >
+        Sepete Ekle
+        {added && <ShoppingCart size={18} />}
+      </button>
+
+      {/* Sepete eklendi modalı */}
       {showModal && (
         <AddToCartModal
           name={name}
@@ -74,6 +68,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           onClose={closeModal}
         />
       )}
-    </>
+    </div>
   );
 };
