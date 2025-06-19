@@ -1,12 +1,9 @@
-// frontend-app/src/app/store/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
 
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import ProductCard from '@/components/ProductCard'; // ❗️default import
-
+import ProductCard from '@/components/ProductCard';
 
 type Product = {
   id: number;
@@ -21,8 +18,6 @@ type CartItem = Product & { quantity: number };
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
 export default function StorePage() {
-  // .env.local'da şu satırın olduğundan emin ol:
-  // NEXT_PUBLIC_API_URL=https://backend-api-rvzd.onrender.com
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,7 +27,6 @@ export default function StorePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // 👇 Burada /api/products ekledik
         const res = await fetch(`${BASE_URL}/api/products`);
         if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
@@ -109,28 +103,14 @@ export default function StorePage() {
       {/* Ürünler */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {filteredProducts.map((p) => (
-          <div
+          <ProductCard
             key={p.id}
-            className="bg-white p-4 rounded-xl shadow hover:shadow-2xl transition cursor-pointer hover:scale-105 h-full flex flex-col"
-          >
-            <Link href={`/store/${p.id}`}>
-              <img
-                src={p.imageUrl}
-                alt={p.name}
-                className="w-full h-40 object-cover rounded-lg mb-2"
-              />
-              <h2 className="text-lg font-bold text-gray-800 mb-1">{p.name}</h2>
-              <p className="text-yellow-700 font-bold text-lg mb-2">
-                {p.price.toFixed(2)} ₺
-              </p>
-            </Link>
-            <button
-              onClick={() => addToCart(p)}
-              className="mt-auto bg-yellow-700 text-white px-3 py-1 rounded-md text-sm"
-            >
-              Sepete Ekle
-            </button>
-          </div>
+            id={p.id}
+            name={p.name}
+            price={p.price}
+            imageUrl={p.imageUrl}
+            onAddToCart={() => addToCart(p)}
+          />
         ))}
       </div>
 
@@ -155,7 +135,10 @@ export default function StorePage() {
           <div className="mt-4">
             <p className="font-semibold">
               Toplam:{' '}
-              {cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)} ₺
+              {cart
+                .reduce((sum, item) => sum + item.price * item.quantity, 0)
+                .toFixed(2)}{' '}
+              ₺
             </p>
             <button
               onClick={handleCheckout}
@@ -169,7 +152,7 @@ export default function StorePage() {
 
       {/* Versiyon etiketi */}
       <div className="text-center mt-10">
-        <p className="text-xs text-gray-400">v0.3.5 - sepet ve sipariş aktif</p>
+        <p className="text-xs text-gray-400">v0.3.6 - kartlar ProductCard ile</p>
       </div>
     </main>
   );
