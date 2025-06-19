@@ -2,6 +2,7 @@
 import './globals.css';
 import Link from 'next/link';
 import CartProvider from '@/context/CartContext';
+import BackToTopButton from '@/components/BackToTopButton';
 
 export const metadata = {
   title: 'Eminella | Takı & Aksesuar Mağazası',
@@ -62,14 +63,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div>
                 <h5 className="font-bold mb-4">Müşteri Hizmetleri</h5>
                 <p className="flex items-center text-sm mb-4">
-                  {/* Telefon ikonu yerine SVG veya bg sınıfı ekleyebilirsin */}
                   <span className="inline-block w-5 h-5 mr-2 bg-phone-icon bg-contain"></span>
                   444 0 878
                 </p>
                 <div className="flex space-x-4 mb-4">
                   <a href="#" className="inline-block w-6 h-6 bg-instagram-icon bg-contain"></a>
                   <a href="#" className="inline-block w-6 h-6 bg-facebook-icon bg-contain"></a>
-                  {/* gerekirse YouTube, X ikonları da ekle */}
                 </div>
                 <p className="text-xs">
                   T-SOFT <span className="font-medium text-purple-500">Premium</span>
@@ -81,22 +80,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="flex flex-wrap justify-center items-center gap-4 mb-4">
                 <img src="/visa.svg" alt="Verified by Visa" className="h-6" />
                 <img src="/master-securecode.svg" alt="Master SecureCODE" className="h-6" />
-                {/* diğer rozet resimlerini de ekleyin */}
               </div>
               <p>© 2024 Eminella | Tüm hakları saklıdır. Kredi kartı bilgileriniz 256-bit SSL ile korunmaktadır.</p>
             </div>
-
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="fixed bottom-6 right-6 p-3 bg-red-600 text-white rounded-full shadow-lg"
-              aria-label="Sayfanın başına dön"
-            >
-              ↑
-            </button>
           </footer>
           {/* Footer sonu */}
+
+          {/* Client-side “Back to Top” butonu */}
+          <BackToTopButton />
         </CartProvider>
       </body>
     </html>
-  );
+);
 }
