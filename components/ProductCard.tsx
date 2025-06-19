@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { ShoppingCart } from 'lucide-react';
 import AddToCartModal from './AddToCartModal';
 
-export interface ProductCardProps {
+interface Props {
   id: number;
   name: string;
   price: number;
@@ -13,7 +13,7 @@ export interface ProductCardProps {
   onAddToCart: (id: number) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCard: React.FC<Props> = ({
   id,
   name,
   price,
@@ -24,13 +24,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [showModal, setShowModal] = useState(false);
 
   const handleClick = () => {
-    onAddToCart(id);       // Sepete ekle
-    setAdded(true);        // Butonu kırmızı yap, ikonu göster
-    setShowModal(true);    // Modalı aç
+    onAddToCart(id);
+    setAdded(true);
+    setShowModal(true);
   };
 
   const closeModal = () => {
-    setShowModal(false);   // Modalı kapat
+    setShowModal(false);
   };
 
   return (
@@ -59,7 +59,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {added && <ShoppingCart size={18} />}
       </button>
 
-      {/* Sepete eklendi modalı */}
       {showModal && (
         <AddToCartModal
           name={name}
@@ -71,3 +70,5 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </div>
   );
 };
+
+export default ProductCard;

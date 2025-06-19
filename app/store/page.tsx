@@ -5,6 +5,8 @@ export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import ProductCard from '@/components/ProductCard'; // ❗️default import
+
 
 type Product = {
   id: number;
