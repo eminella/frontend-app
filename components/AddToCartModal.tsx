@@ -14,13 +14,11 @@ const AddToCartModal = ({ name, price, imageUrl, onClose }: Props) => {
   const router = useRouter();
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-lg">
-        <h2 className="text-lg font-bold mb-3 text-center text-gray-900">
-          Ürün Sepete Eklendi!
-        </h2>
+    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+      <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-2xl text-center">
+        <h2 className="text-lg font-bold mb-4 text-gray-800">Ürün Sepete Eklendi!</h2>
 
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center mb-6">
           {imageUrl && (
             <Image
               src={imageUrl}
@@ -30,22 +28,20 @@ const AddToCartModal = ({ name, price, imageUrl, onClose }: Props) => {
               className="rounded mb-3"
             />
           )}
-          <p className="font-semibold text-gray-800 mb-1">{name}</p>
-          <p className="text-green-600 font-bold mb-4">
-            {price.toFixed(2)} ₺
-          </p>
+          <p className="font-semibold text-gray-700">{name}</p>
+          <p className="text-green-600 font-bold">{price.toFixed(2)} ₺</p>
         </div>
 
-        <div className="flex justify-between gap-4">
+        <div className="flex gap-4">
           <button
             onClick={onClose}
-            className="flex-1 border border-gray-300 rounded-xl py-2 hover:bg-gray-100 text-gray-800"
+            className="flex-1 border border-gray-300 rounded-xl py-2 hover:bg-gray-100 text-sm text-gray-700"
           >
             Alışverişe Devam Et
           </button>
           <button
             onClick={() => router.push('/cart')}
-            className="flex-1 bg-red-600 text-white rounded-xl py-2 hover:bg-red-700"
+            className="flex-1 bg-red-600 text-white rounded-xl py-2 hover:bg-red-700 text-sm"
           >
             Sepete Git
           </button>
