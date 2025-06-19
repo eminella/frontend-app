@@ -1,6 +1,7 @@
+// frontend-app/src/app/layout.tsx
 import './globals.css';
 import Link from 'next/link';
-import CartProvider from '@/context/CartContext'; // ✅ doğru yolu kontrol et
+import CartProvider from '@/context/CartContext';
 
 export const metadata = {
   title: 'Eminella | Takı & Aksesuar Mağazası',
@@ -9,10 +10,13 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body>
-        <CartProvider> {/* ✅ Sepet sistemi için gerekli olan sarmalayıcı */}
-          <header className="p-4 bg-yellow-800 text-white flex justify-between">
-            <Link href="/"><h1 className="text-2xl font-bold">Eminella</h1></Link>
+      <body className="flex flex-col min-h-screen">
+        <CartProvider>
+          {/* Header */}
+          <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
+            <Link href="/">
+              <h1 className="text-2xl font-bold">Eminella</h1>
+            </Link>
             <nav>
               <Link href="/store" className="px-2">Mağaza</Link>
               <Link href="/cart" className="px-2">Sepet</Link>
@@ -20,11 +24,77 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </header>
 
-          <main>{children}</main>
+          {/* Sayfa içeriği */}
+          <main className="flex-grow">
+            {children}
+          </main>
 
-          <footer className="p-4 bg-gray-100 text-center text-sm text-gray-600">
-            © 2025 Eminella. Tüm hakları saklıdır.
+          {/* Detaylı Footer */}
+          <footer className="bg-white py-12">
+            <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+              {/* 1. sütun */}
+              <div>
+                <h5 className="font-bold mb-4">TRT Lisans</h5>
+                <ul className="space-y-2 text-sm">
+                  <li><a href="#">Hakkımızda</a></li>
+                  <li><a href="#">Lisanslarımız</a></li>
+                  <li><a href="#">Bize Ulaşın</a></li>
+                </ul>
+              </div>
+              {/* 2. sütun */}
+              <div>
+                <h5 className="font-bold mb-4">TRT Market</h5>
+                <ul className="space-y-2 text-sm">
+                  <li><a href="#">Çerez Politikamız</a></li>
+                  <li><a href="#">Mesafeli Satış</a></li>
+                  <li><a href="#">Sıkça Sorulan Sorular</a></li>
+                </ul>
+              </div>
+              {/* 3. sütun */}
+              <div>
+                <h5 className="font-bold mb-4">Hesabım</h5>
+                <ul className="space-y-2 text-sm">
+                  <li><a href="#">Üyelik Bilgileri</a></li>
+                  <li><a href="#">İptal / İade Başvurusu</a></li>
+                </ul>
+              </div>
+              {/* 4. sütun */}
+              <div>
+                <h5 className="font-bold mb-4">Müşteri Hizmetleri</h5>
+                <p className="flex items-center text-sm mb-4">
+                  {/* Telefon ikonu yerine SVG veya bg sınıfı ekleyebilirsin */}
+                  <span className="inline-block w-5 h-5 mr-2 bg-phone-icon bg-contain"></span>
+                  444 0 878
+                </p>
+                <div className="flex space-x-4 mb-4">
+                  <a href="#" className="inline-block w-6 h-6 bg-instagram-icon bg-contain"></a>
+                  <a href="#" className="inline-block w-6 h-6 bg-facebook-icon bg-contain"></a>
+                  {/* gerekirse YouTube, X ikonları da ekle */}
+                </div>
+                <p className="text-xs">
+                  T-SOFT <span className="font-medium text-purple-500">Premium</span>
+                </p>
+              </div>
+            </div>
+
+            <div className="container mx-auto px-6 mt-8 border-t pt-6 text-center text-xs text-gray-500">
+              <div className="flex flex-wrap justify-center items-center gap-4 mb-4">
+                <img src="/visa.svg" alt="Verified by Visa" className="h-6" />
+                <img src="/master-securecode.svg" alt="Master SecureCODE" className="h-6" />
+                {/* diğer rozet resimlerini de ekleyin */}
+              </div>
+              <p>© 2024 Eminella | Tüm hakları saklıdır. Kredi kartı bilgileriniz 256-bit SSL ile korunmaktadır.</p>
+            </div>
+
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="fixed bottom-6 right-6 p-3 bg-red-600 text-white rounded-full shadow-lg"
+              aria-label="Sayfanın başına dön"
+            >
+              ↑
+            </button>
           </footer>
+          {/* Footer sonu */}
         </CartProvider>
       </body>
     </html>
