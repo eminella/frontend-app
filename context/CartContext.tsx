@@ -10,22 +10,21 @@ type Product = {
   imageUrl?: string;
 };
 
-type CartItem = Product & { quantity: number };
+export type CartItem = Product & { quantity: number };
 
 type CartContextType = {
   cartItems: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (id: number) => void;
+  toggleMiniCart: () => void;
 };
 
-// context oluştur
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// provider tanımı
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isMiniCartOpen, setMiniCartOpen] = useState(false);
 
-  // sepete ekle
   const addToCart = (product: Product, quantity: number = 1) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
@@ -40,19 +39,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  // sepetten çıkar
   const removeFromCart = (id: number) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const toggleMiniCart = () => {
+    setMiniCartOpen((prev) => !prev);
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, toggleMiniCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-// context hook'u
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) throw new Error('useCart must be used within CartProvider');

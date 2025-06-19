@@ -6,7 +6,12 @@ import { User, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 export default function Header() {
-  const { cart, toggleMiniCart } = useCart();
+  const { cartItems, toggleMiniCart } = useCart();
+
+  {cartItems.length > 0 && (
+    <span>{cartItems.length}</span>
+  )}
+  
 
   return (
     <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
@@ -31,9 +36,9 @@ export default function Header() {
         >
           <ShoppingCart className="w-5 h-5" />
           <span>Sepet</span>
-          {cart.length > 0 && (
+          {cartItems.length > 0 && (
             <span className="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-              {cart.length}
+              {cartItems.length}
             </span>
           )}
         </button>
