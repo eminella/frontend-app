@@ -1,13 +1,9 @@
-// frontend-app/src/app/store/[id]/page.tsx
 'use client';
 
-import { notFound } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { notFound, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import classNames from 'classnames';
-
-// .env.local dosyanızda şu satırın olduğundan emin olun:
-// NEXT_PUBLIC_API_URL=https://backend-api-rvzd.onrender.com
 
 type Product = {
   id: number;
@@ -17,21 +13,28 @@ type Product = {
   imageUrl?: string;
 };
 
-const tabs = ['Ürün Açıklaması', 'Ödeme Seçenekleri', 'Tavsiye Et', 'İade Koşulları'];
+const tabs = [
+  'Ürün Açıklaması',
+  'Ödeme Seçenekleri',
+  'Tavsiye Et',
+  'İade Koşulları',
+];
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const { addToCart } = useCart();
-
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
+  const router = useRouter();
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // /api ekleyerek doğru endpoint'i çağırıyoruz
-        const res = await fetch(`${BASE_URL}/api/products/${params.id}`);
+        const res = await fetch(
+          `${BASE_URL}/api/products/${params.id}`
+        );
         if (!res.ok) return notFound();
         const data = await res.json();
         setProduct(data);
@@ -43,7 +46,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     fetchProduct();
   }, [params.id, BASE_URL]);
 
-  if (!product) return <div className="p-10 text-center text-gray-500">Ürün yükleniyor...</div>;
+  if (!product)
+    return (
+      <div className="p-10 text-center text-gray-500">
+        Ürün yükleniyor...
+      </div>
+    );
 
   return (
     <main className="p-4 md:p-10 max-w-5xl mx-auto bg-white rounded-xl shadow-lg">
@@ -59,9 +67,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
         {/* Ürün Bilgileri */}
         <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+          <h1 className="text-2xl font-bold mb-2">
+            {product.name}
+          </h1>
           <p className="text-sm text-gray-500 mb-2">
-            Ürün Kodu: EM{product.id.toString().padStart(6, '0')}
+            Ürün Kodu: EM
+            {product.id.toString().padStart(6, '0')}
           </p>
 
           <div className="mb-4">
@@ -73,20 +84,28 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </span>
           </div>
 
-          {/* Sepete Ekle */}
+          {/* Miktar + Sepete Ekle */}
           <div className="flex items-center gap-3 mb-6">
             <button
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              onClick={() =>
+                setQuantity((q) => Math.max(1, q - 1))
+              }
               className="w-8 h-8 text-lg rounded-full border border-gray-300"
-            >–</button>
+            >
+              –
+            </button>
             <span className="w-10 text-center">{quantity}</span>
             <button
               onClick={() => setQuantity((q) => q + 1)}
               className="w-8 h-8 text-lg rounded-full border border-gray-300"
-            >+</button>
-
+            >
+              +
+            </button>
             <button
-              onClick={() => addToCart(product, quantity)}
+              onClick={() => {
+                addToCart(product, quantity);
+                router.push('/cart');
+              }}
               className="ml-6 bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
             >
               SEPETE EKLE
@@ -103,7 +122,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={classNames(
-                'pb-2 text-sm font-medium',
+                'pb-2 text-sm font-medium transition-colors',
                 activeTab === tab
                   ? 'border-b-2 border-red-600 text-red-600'
                   : 'text-gray-500 hover:text-red-600'
@@ -113,10 +132,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </button>
           ))}
         </div>
-
         <div className="text-gray-700 text-sm leading-relaxed">
           {activeTab === 'Ürün Açıklaması' && (
-            <p>{product.name} ürünü yüksek kalite malzemelerle üretilmiştir. Suya ve kimyasala temas etmemelidir.</p>
+            <p>
+              {product.name} ürünü yüksek kalite
+              malzemelerle üretilmiştir. Suya ve
+              kimyasala temas etmemelidir.
+            </p>
           )}
           {activeTab === 'Ödeme Seçenekleri' && (
             <p>Kredi kartı, havale ve kapıda ödeme seçenekleri mevcuttur.</p>

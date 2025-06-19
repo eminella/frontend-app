@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart } from 'lucide-react';
 import AddToCartModal from './AddToCartModal';
@@ -29,44 +30,56 @@ const ProductCard: React.FC<Props> = ({
     setShowModal(true);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   return (
-    <div className="border rounded-2xl shadow p-4 flex flex-col h-full relative">
-      <div className="relative h-48 w-full mb-4">
+    <div className="border rounded-2xl shadow p-4 flex flex-col h-full relative hover:shadow-lg transition-shadow">
+      {/* Resim */}
+      <Link href={`/store/${id}`} className="block relative h-48 w-full mb-4 overflow-hidden rounded-xl">
         {imageUrl ? (
-          <Image src={imageUrl} alt={name} fill className="object-contain" />
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            className="object-contain transition-transform duration-300 hover:scale-105"
+          />
         ) : (
           <div className="bg-gray-100 h-full flex items-center justify-center">
             <span className="text-gray-400">No Image</span>
           </div>
         )}
-      </div>
+      </Link>
 
-      <h3 className="text-lg font-semibold mb-2">{name}</h3>
-      <p className="text-xl font-bold text-green-600 mb-4">{price.toFixed(2)} ₺</p>
+      {/* Başlık */}
+      <Link
+        href={`/store/${id}`}
+        className="text-lg font-semibold mb-2 text-gray-800 hover:text-red-600 transition-colors"
+      >
+        {name}
+      </Link>
 
+      <p className="text-xl font-bold text-green-600 mb-4">
+        {price.toFixed(2)} ₺
+      </p>
+
+      {/* Sepete Ekle */}
       <button
-  onClick={handleClick}
-  className={`mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 transition-all duration-300 ease-in-out
-    ${added
-      ? 'bg-red-600 text-white shadow-lg hover:bg-red-700'
-      : 'bg-white text-red-600 border border-red-600 hover:bg-red-600 hover:text-white hover:shadow-md'}
-  `}
->
-  Sepete Ekle
-  {added && <ShoppingCart size={18} />}
-</button>
+        onClick={handleClick}
+        className={`mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 transition-colors duration-300
+          ${added
+            ? 'bg-red-600 text-white shadow-lg hover:bg-red-700'
+            : 'bg-white text-red-600 border border-red-600 hover:bg-red-600 hover:text-white hover:shadow-md'
+        }`}
+      >
+        Sepete Ekle
+        {added && <ShoppingCart size={18} />}
+      </button>
 
-
+      {/* Modal */}
       {showModal && (
         <AddToCartModal
           name={name}
           price={price}
           imageUrl={imageUrl}
-          onClose={closeModal}
+          onClose={() => setShowModal(false)}
         />
       )}
     </div>
