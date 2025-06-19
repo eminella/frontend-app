@@ -1,20 +1,21 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      'images.pexels.com', // <-- Bunu ekle!
-      'res.cloudinary.com',
-      'backend-api-rvzd.onrender.com'
-    ],
-  },
-  async redirects() {
-    return [
+    remotePatterns: [
       {
-        source: '/',
-        destination: '/store',
-        permanent: false,
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        port: '',
+        pathname: '/**',
       },
-    ];
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
