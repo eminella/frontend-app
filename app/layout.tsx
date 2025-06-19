@@ -1,6 +1,6 @@
 // frontend-app/src/app/layout.tsx
 import './globals.css';
-import CartProvider from '@/context/CartContext';
+import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import MiniCart from '@/components/MiniCart';
 import BackToTopButton from '@/components/BackToTopButton';
