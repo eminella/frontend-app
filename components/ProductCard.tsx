@@ -1,4 +1,3 @@
-// frontend-app/components/ProductCard.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -14,6 +13,9 @@ interface Props {
   imageUrl?: string;
   onAddToCart: (id: number) => void;
 }
+
+const fallbackImg =
+  'https://images.pexels.com/photos/1457983/pexels-photo-1457983.jpeg'; // Yedek resim, istersen değiştir
 
 const ProductCard: React.FC<Props> = ({
   id,
@@ -38,18 +40,14 @@ const ProductCard: React.FC<Props> = ({
         href={`/store/${id}`}
         className="block relative h-48 w-full mb-4 overflow-hidden rounded-xl"
       >
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={name}
-            fill
-            className="object-contain transition-transform duration-300 hover:scale-105"
-          />
-        ) : (
-          <div className="bg-gray-100 h-full flex items-center justify-center">
-            <span className="text-gray-400">No Image</span>
-          </div>
-        )}
+        <Image
+          src={imageUrl || fallbackImg}
+          alt={name}
+          fill
+          sizes="100vw"
+          className="object-contain transition-transform duration-300 hover:scale-105"
+          priority
+        />
       </Link>
 
       {/* Başlık */}
