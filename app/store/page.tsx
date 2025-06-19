@@ -83,24 +83,27 @@ export default function StorePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
-      {/* Kategoriler */}
-      <div className="flex gap-2 mb-8 flex-wrap justify-center">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded text-sm font-semibold transition-all shadow ${
-              selectedCategory === cat
-                ? 'bg-yellow-700 text-white'
-                : 'bg-yellow-100 text-yellow-800'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+
+      {/* Kategoriler - TRT tarzı menü */}
+      <div className="bg-gray-100 py-3 px-4 rounded-xl shadow-sm mb-10 max-w-5xl mx-auto overflow-x-auto">
+        <div className="flex gap-6 justify-center flex-wrap text-sm font-semibold text-gray-700">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`transition px-2 pb-1 border-b-2 ${
+                selectedCategory === cat
+                  ? 'border-red-600 text-red-600'
+                  : 'border-transparent hover:border-gray-400 hover:text-black'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Ürünler */}
+      {/* Ürün Kartları */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {filteredProducts.map((p) => (
           <ProductCard
@@ -114,7 +117,7 @@ export default function StorePage() {
         ))}
       </div>
 
-      {/* Sepet */}
+      {/* Sepet Alanı */}
       <div className="bg-white rounded-xl shadow p-4 mt-10 max-w-2xl mx-auto">
         <h3 className="text-lg font-bold mb-2">🛒 Sepet</h3>
         {cart.length === 0 ? (
@@ -135,10 +138,7 @@ export default function StorePage() {
           <div className="mt-4">
             <p className="font-semibold">
               Toplam:{' '}
-              {cart
-                .reduce((sum, item) => sum + item.price * item.quantity, 0)
-                .toFixed(2)}{' '}
-              ₺
+              {cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)} ₺
             </p>
             <button
               onClick={handleCheckout}
@@ -152,7 +152,7 @@ export default function StorePage() {
 
       {/* Versiyon etiketi */}
       <div className="text-center mt-10">
-        <p className="text-xs text-gray-400">v0.3.6 - kartlar ProductCard ile</p>
+        <p className="text-xs text-gray-400">v0.3.7 - TRT Market kategori menüsü</p>
       </div>
     </main>
   );
