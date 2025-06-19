@@ -2,16 +2,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { User, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 export default function Header() {
-  const { cartItems, toggleMiniCart } = useCart();
-
-  {cartItems.length > 0 && (
-    <span>{cartItems.length}</span>
-  )}
-  
+  const { cartItems } = useCart();
+  const router = useRouter();
 
   return (
     <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
@@ -31,7 +28,7 @@ export default function Header() {
         </Link>
         <span className="opacity-50">|</span>
         <button
-          onClick={toggleMiniCart}
+          onClick={() => router.push('/cart')}
           className="relative flex items-center space-x-1 hover:opacity-90"
         >
           <ShoppingCart className="w-5 h-5" />
