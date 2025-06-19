@@ -17,7 +17,9 @@ type CartContextType = {
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (id: number) => void;
   toggleMiniCart: () => void;
+  isMiniCartOpen: boolean; // 🔥 BUNU EKLE!
 };
+
 
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -48,8 +50,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, toggleMiniCart }}>
-      {children}
+<CartContext.Provider value={{ cartItems, addToCart, removeFromCart, toggleMiniCart, isMiniCartOpen }}>
+{children}
     </CartContext.Provider>
   );
 };

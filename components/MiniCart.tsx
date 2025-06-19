@@ -1,78 +1,80 @@
-// frontend-app/src/components/MiniCart.tsx
 'use client';
 
-import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function MiniCart() {
-  const { cart, isMiniCartOpen, toggleMiniCart, removeFromCart } = useCart();
+  const { cartItems, isMiniCartOpen, toggleMiniCart, removeFromCart } = useCart();
 
   if (!isMiniCartOpen) return null;
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = 5; // Sabit kargo ücreti örneği
-  const total = subtotal + shipping;
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <>
-      {/* Kapatmak için overlay */}
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        onClick={toggleMiniCart}
-      />
-
-      {/* Mini-cart panel */}
-      <div className="fixed right-0 top-0 h-full w-full sm:w-80 bg-white z-50 p-6 flex flex-col">
-        <button
-          onClick={toggleMiniCart}
-          className="self-end text-2xl font-bold"
-          aria-label="Mini cart kapat"
-        >
-          ×
-        </button>
-
-        <h2 className="text-lg font-medium mb-4">Sepetim</h2>
-
-        <ul className="flex-grow overflow-y-auto space-y-4">
-          {cart.map(item => (
-            <li key={item.id} className="flex items-center">
-              <img src={item.imageUrl} alt={item.name} className="w-16 h-16 rounded mr-3" />
-              <div className="flex-grow">
-                <p className="font-medium">{item.name}</p>
-                <p className="text-sm">{item.quantity} × {item.price.toFixed(2)} ₺</p>
-              </div>
-              <p className="font-semibold">{(item.quantity * item.price).toFixed(2)} ₺</p>
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="ml-2 text-gray-400 hover:text-gray-600"
-                aria-label="Ürünü kaldır"
-              >
-                ×
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-4 border-t pt-4 space-y-2 text-sm">
-          <p>Sepet Toplamı: {subtotal.toFixed(2)} ₺</p>
-          <p>Kargo Ücreti: {shipping.toFixed(2)} ₺</p>
-          <p className="font-semibold">Genel Toplam: {total.toFixed(2)} ₺</p>
-        </div>
-
-        <div className="mt-6 space-y-2">
-          <Link href="/cart">
-            <button className="w-full bg-red-600 text-white py-2 rounded">
-              Sepete Git
-            </button>
-          </Link>
-          <button
-            onClick={toggleMiniCart}
-            className="w-full border py-2 rounded"
-          >
-            Alışverişe Devam Et
+    <div className="fixed inset-0 z-50 flex items-end justify-end bg-black bg-opacity-50">
+      <div className="bg-white w-full sm:w-[400px] p-6 shadow-lg rounded-t-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Sepetim</h2>
+          <button onClick={toggleMiniCart} className="text-red-600 hover:underline">
+            Kapat
           </button>
         </div>
+
+        {cartItems.length === 0 ? (
+          <p className="text-gray-500">Sepetiniz boş.</p>
+        ) : (
+          <>
+            {cartItems.map((item) => (
+              <div key={item.id} className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  {item.imageUrl && (
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      width={50}
+                      height={50}
+                      className="rounded object-cover"
+                    />
+                  )}
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {item.price.toFixed(2)} ₺ x {item.quantity}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-red-600">
+                    {(item.price * item.quantity).toFixed(2)} ₺
+                  </p>
+                  <button
+                    onClick={() => removeFromCart(item.id)}
+                    className="text-xs text-red-500 hover:underline"
+                  >
+                    Kaldır
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <hr className="my-4" />
+
+            <div className="flex justify-between items-center mb-4">
+              <span className="font-semibold">Toplam:</span>
+              <span className="text-lg font-bold text-green-600">{total.toFixed(2)} ₺</span>
+            </div>
+
+            <Link
+              href="/cart"
+              onClick={toggleMiniCart}
+              className="block bg-red-600 text-white text-center py-2 rounded-lg hover:bg-red-700"
+            >
+              Sepete Git
+            </Link>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 }
