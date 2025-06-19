@@ -1,7 +1,8 @@
 // frontend-app/src/app/layout.tsx
 import './globals.css';
-import Link from 'next/link';
 import CartProvider from '@/context/CartContext';
+import Header from '@/components/Header';
+import MiniCart from '@/components/MiniCart';
 import BackToTopButton from '@/components/BackToTopButton';
 
 export const metadata = {
@@ -13,24 +14,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="tr">
       <body className="flex flex-col min-h-screen">
         <CartProvider>
-          {/* Header */}
-          <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
-            <Link href="/">
-              <h1 className="text-2xl font-bold">Eminella</h1>
-            </Link>
-            <nav>
-              <Link href="/store" className="px-2">Mağaza</Link>
-              <Link href="/cart" className="px-2">Sepet</Link>
-              <Link href="/account" className="px-2">Hesabım</Link>
-            </nav>
-          </header>
+          {/* *** HEADER COMPONENT *** */}
+          <Header />
 
-          {/* Sayfa içeriği */}
+          {/* *** ANA İÇERİK *** */}
           <main className="flex-grow">
             {children}
           </main>
 
-          {/* Detaylı Footer */}
+          {/* *** FOOTER *** */}
           <footer className="bg-white py-12">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* 1. sütun */}
@@ -84,9 +76,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <p>© 2024 Eminella | Tüm hakları saklıdır. Kredi kartı bilgileriniz 256-bit SSL ile korunmaktadır.</p>
             </div>
           </footer>
-          {/* Footer sonu */}
 
-          {/* Client-side “Back to Top” butonu */}
+          {/* *** MINI-CART OVERLAY & PANEL *** */}
+          <MiniCart />
+
+          {/* *** CLIENT-SIDE BACK TO TOP BUTTON *** */}
           <BackToTopButton />
         </CartProvider>
       </body>
