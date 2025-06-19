@@ -15,6 +15,7 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      // Gerekirse başka domainler ekle
     ],
   },
 };

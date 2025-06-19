@@ -1,4 +1,3 @@
-// frontend-app/app/store/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
@@ -29,12 +28,17 @@ export default function StorePage() {
     fetch(`${BASE_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
-        console.log("API'den gelen ürünler:", data); // <- BURAYA EKLE
-        if (Array.isArray(data)) setProducts(data);
+        console.log("API'den gelen ürünler:", data); // Debug için
+        if (Array.isArray(data)) {
+          const cleanData = data.map(item => ({
+            ...item,
+            imageUrl: item.imageUrl?.trim(), // Burada baştaki/sondaki boşlukları temizliyoruz
+          }));
+          setProducts(cleanData);
+        }
       })
       .catch(err => console.error('Ürünler yüklenemedi:', err));
   }, [BASE_URL]);
-  
 
   const filtered =
     selectedCategory === 'Tümü'
