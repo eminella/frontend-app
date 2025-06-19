@@ -14,7 +14,7 @@ const AddToCartModal = ({ name, price, imageUrl, onClose }: Props) => {
   const router = useRouter();
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-2xl text-center">
         <h2 className="text-lg font-bold mb-4 text-gray-800">Ürün Sepete Eklendi!</h2>
 
