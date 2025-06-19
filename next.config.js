@@ -1,17 +1,34 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: [
+      'res.cloudinary.com',
+      'backend-api-rvzd.onrender.com',  // API sunucundan çekiyorsan ekle
+    ],
+    // Next.js 14+ kullanıyorsan dilersen şöyle de tanımlayabilirsin:
+    // remotePatterns: [
+    //   {
+    //     protocol: 'https',
+    //     hostname: 'res.cloudinary.com',
+    //     port: '',
+    //     pathname: '/<your-cloud-name>/**',
+    //   },
+    //   {
+    //     protocol: 'https',
+    //     hostname: 'backend-api-rvzd.onrender.com',
+    //     port: '',
+    //     pathname: '/uploads/**',
+    //   },
+    // ],
   },
-
-  // Eğer daha önce rewrites eklediyseniz silebilir veya yanında bırakabilirsiniz.
   async redirects() {
     return [
       {
-        source: "/",         // Ana path
-        destination: "/store",// Yönlendirilecek path
-        permanent: false,     // geçici yönlendirme (307)
+        source: '/',
+        destination: '/store',
+        permanent: false,
       },
     ];
   },

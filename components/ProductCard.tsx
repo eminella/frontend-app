@@ -1,3 +1,4 @@
+// frontend-app/components/ProductCard.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -33,7 +34,10 @@ const ProductCard: React.FC<Props> = ({
   return (
     <div className="border rounded-2xl shadow p-4 flex flex-col h-full relative hover:shadow-lg transition-shadow">
       {/* Resim */}
-      <Link href={`/store/${id}`} className="block relative h-48 w-full mb-4 overflow-hidden rounded-xl">
+      <Link
+        href={`/store/${id}`}
+        className="block relative h-48 w-full mb-4 overflow-hidden rounded-xl"
+      >
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -63,8 +67,8 @@ const ProductCard: React.FC<Props> = ({
       {/* Sepete Ekle */}
       <button
         onClick={handleClick}
-        className={`mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 transition-colors duration-300
-          ${added
+        className={`mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 transition-colors duration-300 ${
+          added
             ? 'bg-red-600 text-white shadow-lg hover:bg-red-700'
             : 'bg-white text-red-600 border border-red-600 hover:bg-red-600 hover:text-white hover:shadow-md'
         }`}
