@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
-import { useRouter } from 'next/navigation';  // Router'ı import ettim
+import { useRouter } from 'next/navigation';
 
 type Product = {
   id: number;
@@ -21,7 +21,7 @@ const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 export default function StorePage() {
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
   const { addToCart } = useCart();
-  const router = useRouter();  // Router'ı burada tanımladım
+  const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
@@ -46,7 +46,6 @@ export default function StorePage() {
       ? products
       : products.filter(p => p.category === selectedCategory);
 
-  // Sepete ekle ve yönlendir fonksiyonu
   const handleAddToCartAndRedirect = (product: Product) => {
     addToCart(product);
     router.push('/cart');
@@ -102,7 +101,7 @@ export default function StorePage() {
             </p>
 
             <button
-              onClick={() => handleAddToCartAndRedirect(p)} // Butonu burada güncelledim
+              onClick={() => handleAddToCartAndRedirect(p)}
               className="mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 
                          bg-white text-red-600 border border-red-600 
                          hover:bg-red-600 hover:text-white hover:shadow-md transition"
