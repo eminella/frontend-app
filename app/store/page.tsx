@@ -28,11 +28,10 @@ export default function StorePage() {
     fetch(`${BASE_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
-        console.log("API'den gelen ürünler:", data); // Debug için
         if (Array.isArray(data)) {
           const cleanData = data.map(item => ({
             ...item,
-            imageUrl: item.imageUrl?.trim(), // Burada baştaki/sondaki boşlukları temizliyoruz
+            imageUrl: item.imageUrl?.trim(),
           }));
           setProducts(cleanData);
         }
@@ -89,8 +88,8 @@ export default function StorePage() {
               )}
             </Link>
 
-            <h3 className="text-lg font-semibold mb-2">{p.name}</h3>
-            <p className="text-xl font-bold text-green-600 mb-4">
+            <h3 className="text-lg font-semibold mb-2 text-black opacity-100">{p.name}</h3>
+            <p className="text-xl font-bold text-green-600 mb-4 text-black opacity-100">
               {p.price.toFixed(2)} ₺
             </p>
 
