@@ -4,9 +4,6 @@ export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
 
-// ...diğer kodların
-
-
 type Product = {
   id: number;
   name: string;
@@ -35,7 +32,7 @@ export default function AdminOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch(`${API}/orders`);
+      const res = await fetch(`${API}/api/orders`);
       if (!res.ok) throw new Error('Siparişler alınamadı.');
       const data = await res.json();
       setOrders(data);
@@ -46,17 +43,17 @@ export default function AdminOrdersPage() {
   };
 
   const updateStatus = async (id: number, newStatus: string) => {
-    if (loadingStatusId !== null) return; // Başka işlem varsa engelle
+    if (loadingStatusId !== null) return;
 
     setLoadingStatusId(id);
     try {
-      const res = await fetch(`${API}/orders/${id}/status`, {
+      const res = await fetch(`${API}/api/orders/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
       if (!res.ok) throw new Error('Durum güncellenemedi.');
-      await fetchOrders(); // Listeyi yenile
+      await fetchOrders();
     } catch (err) {
       alert('Durum güncellenemedi. Lütfen tekrar deneyin.');
       console.error('Durum güncellenemedi:', err);
@@ -65,7 +62,6 @@ export default function AdminOrdersPage() {
     }
   };
 
-  // Duruma göre buton rengi döndüren fonksiyon
   const getButtonClass = (orderStatus: string, buttonStatus: string) => {
     if (orderStatus === buttonStatus) {
       switch (buttonStatus) {
