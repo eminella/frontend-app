@@ -46,34 +46,34 @@ export default function NewProductPage() {
 
   return (
     <main className="max-w-xl mx-auto bg-white p-6 shadow rounded mt-6">
-      <h1 className="text-2xl font-bold mb-6">🆕 Yeni Ürün Ekle</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">🆕 Yeni Ürün Ekle</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-medium">Ürün Adı</label>
+          <label className="block font-medium text-gray-900 mb-1">Ürün Adı</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-600"
             required
           />
         </div>
         <div>
-          <label className="block font-medium">Fiyat (TL)</label>
+          <label className="block font-medium text-gray-900 mb-1">Fiyat (TL)</label>
           <input
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-600"
             required
           />
         </div>
         <div>
-          <label className="block font-medium">Kategori</label>
+          <label className="block font-medium text-gray-900 mb-1">Kategori</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-600"
           >
             <option>Kolye</option>
             <option>Küpe</option>
@@ -82,19 +82,19 @@ export default function NewProductPage() {
           </select>
         </div>
         <div>
-          <label className="block font-medium">Ürün Görseli</label>
+          <label className="block font-medium text-gray-900 mb-1">Ürün Görseli</label>
           <input
             type="file"
             accept="image/*"
             onChange={(e) => setImage(e.target.files?.[0] || null)}
-            className="w-full"
+            className="w-full text-gray-900"
             required
           />
         </div>
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-yellow-700 hover:bg-yellow-800 text-white px-4 py-2 rounded font-semibold"
         >
           {loading ? 'Yükleniyor...' : 'Ürün Ekle'}
         </button>
