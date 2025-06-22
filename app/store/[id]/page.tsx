@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import classNames from 'classnames';
-import ImageModal from '@/components/ImageModal';            // 👈 yeni import
+import ImageModal from '@/components/ImageModal';
 
 type Product = {
   id: number;
@@ -25,12 +25,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [showModal, setShowModal] = useState(false);        // 👈 modal state
+  const [showModal, setShowModal] = useState(false);
   const { addToCart } = useCart();
   const router = useRouter();
-  const BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
+  /* --------- Ürünü getir --------- */
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -53,6 +53,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       </div>
     );
 
+  /* --------- UI --------- */
   return (
     <main className="p-4 md:p-10 max-w-5xl mx-auto bg-white rounded-xl shadow-lg">
       <div className="flex flex-col md:flex-row gap-10">
@@ -62,13 +63,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             src={product.imageUrl || '/default-product.jpg'}
             alt={product.name}
             className="w-full max-h-[400px] object-contain rounded-xl border cursor-pointer"
-            onClick={() => setShowModal(true)}               // 👈 tıklayınca modal
+            onClick={() => setShowModal(true)}
           />
         </div>
 
         {/* Ürün Bilgileri */}
         <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+          {/* 👇 Başlık koyu */}
+          <h1 className="text-2xl font-bold mb-2 text-gray-900">
+            {product.name}
+          </h1>
+
           <p className="text-sm text-gray-500 mb-2">
             Ürün Kodu: EM{product.id.toString().padStart(6, '0')}
           </p>
@@ -84,19 +89,25 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
           {/* Miktar + Sepete Ekle */}
           <div className="flex items-center gap-3 mb-6">
+            {/* 👇 Koyu + daha belirgin */}
             <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="w-8 h-8 text-lg rounded-full border border-gray-300"
+              className="w-8 h-8 text-lg rounded-full border border-gray-400 text-gray-800"
             >
               –
             </button>
-            <span className="w-10 text-center">{quantity}</span>
+
+            <span className="w-10 text-center text-gray-800 font-medium text-lg">
+              {quantity}
+            </span>
+
             <button
               onClick={() => setQuantity((q) => q + 1)}
-              className="w-8 h-8 text-lg rounded-full border border-gray-300"
+              className="w-8 h-8 text-lg rounded-full border border-gray-400 text-gray-800"
             >
               +
             </button>
+
             <button
               onClick={() => {
                 addToCart(product, quantity);
@@ -128,6 +139,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </button>
           ))}
         </div>
+
         <div className="text-gray-700 text-sm leading-relaxed">
           {activeTab === 'Ürün Açıklaması' && (
             <p>
@@ -144,19 +156,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </p>
           )}
           {activeTab === 'İade Koşulları' && (
-            <p>
-              Ürünü 14 gün içinde iade edebilirsin. Koşulsuz iade garantisi.
-            </p>
+            <p>Ürünü 7 gün içinde iade edebilirsin. Koşulsuz iade garantisi.</p>
           )}
         </div>
       </div>
 
-      {/* 👇 Modal */}
+      {/* Modal */}
       {showModal && product.imageUrl && (
-        <ImageModal
-          imageUrl={product.imageUrl}
-          onClose={() => setShowModal(false)}
-        />
+        <ImageModal imageUrl={product.imageUrl} onClose={() => setShowModal(false)} />
       )}
     </main>
   );
