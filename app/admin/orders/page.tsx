@@ -90,7 +90,8 @@ export default function AdminOrdersPage() {
 
   return (
     <main className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Siparişler</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">📦 Siparişler</h1>
+
 
       {orders.length === 0 && <p className="text-black font-medium">Henüz sipariş yok.</p>}
 
