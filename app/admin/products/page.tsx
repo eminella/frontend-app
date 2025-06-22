@@ -33,6 +33,26 @@ export default function AdminProductsPage() {
     fetchProducts();
   }, []);
 
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm('Bu ürünü silmek istediğine emin misin?');
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/products/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setProducts(products.filter((product) => product.id !== id));
+      } else {
+        alert('Silme işlemi başarısız.');
+      }
+    } catch (err) {
+      console.error('Silme hatası:', err);
+      alert('Sunucu hatası');
+    }
+  };
+
   return (
     <div className="p-6 bg-white min-h-screen text-gray-900">
       <h1 className="text-2xl font-bold mb-6">Admin Ürün Yönetimi</h1>
@@ -50,6 +70,7 @@ export default function AdminProductsPage() {
               <th className="px-4 py-2 font-bold text-gray-900">İsim</th>
               <th className="px-4 py-2 font-bold text-gray-900">Fiyat</th>
               <th className="px-4 py-2 font-bold text-gray-900">Kategori</th>
+              <th className="px-4 py-2 font-bold text-gray-900">İşlem</th>
             </tr>
           </thead>
           <tbody>
@@ -73,6 +94,14 @@ export default function AdminProductsPage() {
                 <td className="px-4 py-2 font-semibold">{product.name}</td>
                 <td className="px-4 py-2 font-semibold">{product.price} ₺</td>
                 <td className="px-4 py-2 font-semibold">{product.category}</td>
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() => handleDelete(product.id)}
+                    className="text-red-600 hover:underline font-bold"
+                  >
+                    Sil
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
