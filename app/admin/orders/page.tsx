@@ -89,13 +89,13 @@ export default function AdminOrdersPage() {
 
   return (
     <main className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">📦 Sipariş Listesi</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">📦 Sipariş Listesi</h1>
 
       {orders.length === 0 ? (
-        <p className="text-black font-medium">Henüz sipariş yok.</p>
+        <p className="text-gray-900 font-medium">Henüz sipariş yok.</p>
       ) : (
         <table className="w-full table-auto border border-gray-300 text-sm">
-          <thead className="bg-gray-100 text-gray-900">
+          <thead className="bg-gray-100 text-gray-900 font-bold text-sm">
             <tr>
               <th className="px-4 py-2 text-left">ID</th>
               <th className="px-4 py-2 text-left">Müşteri</th>
@@ -111,12 +111,14 @@ export default function AdminOrdersPage() {
           <tbody>
             {orders.map((order) => (
               <tr key={order.id} className="border-t border-gray-200 hover:bg-gray-50">
-                <td className="px-4 py-2 font-medium">{order.id}</td>
-                <td className="px-4 py-2">{order.customerName || '-'}</td>
-                <td className="px-4 py-2">{order.phone || '-'}</td>
-                <td className="px-4 py-2">{order.address || '-'}</td>
-                <td className="px-4 py-2">{new Date(order.createdAt).toLocaleString('tr-TR')}</td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 text-gray-900 font-medium">{order.id}</td>
+                <td className="px-4 py-2 text-gray-900 font-medium">{order.customerName || '-'}</td>
+                <td className="px-4 py-2 text-gray-900 font-medium">{order.phone || '-'}</td>
+                <td className="px-4 py-2 text-gray-900 font-medium">{order.address || '-'}</td>
+                <td className="px-4 py-2 text-gray-900 font-medium">
+                  {new Date(order.createdAt).toLocaleString('tr-TR')}
+                </td>
+                <td className="px-4 py-2 text-gray-900 font-medium">
                   <ul className="list-disc list-inside">
                     {order.products.map((p) => (
                       <li key={p.id}>
@@ -125,8 +127,10 @@ export default function AdminOrdersPage() {
                     ))}
                   </ul>
                 </td>
-                <td className="px-4 py-2">{order.totalAmount.toFixed(2)} TL</td>
-                <td className="px-4 py-2 font-semibold text-blue-700">{order.status}</td>
+                <td className="px-4 py-2 text-gray-900 font-semibold">
+                  {order.totalAmount.toFixed(2)} TL
+                </td>
+                <td className="px-4 py-2 font-bold text-blue-700">{order.status}</td>
                 <td className="px-4 py-2 space-y-1">
                   {['Hazirlanıyor', 'Kargoya Verildi', 'Teslim Edildi'].map((status) => (
                     <button
