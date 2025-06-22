@@ -16,14 +16,14 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md space-y-4">
-        <h2 className="text-xl font-bold mb-4">Kayıt Ol</h2>
+        <h2 className="text-xl font-bold mb-4 text-gray-900">Kayıt Ol</h2>
         <input
           type="text"
           placeholder="Ad Soyad"
           value={name}
           onChange={e => setName(e.target.value)}
           required
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded text-gray-900"
         />
         <input
           type="email"
@@ -31,7 +31,7 @@ export default function RegisterPage() {
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded text-gray-900"
         />
         <input
           type="password"
@@ -39,9 +39,12 @@ export default function RegisterPage() {
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded text-gray-900"
         />
-        <button type="submit" className="w-full bg-red-600 text-white py-2 rounded font-semibold hover:bg-red-700">
+        <button
+          type="submit"
+          className="w-full bg-red-600 text-white py-2 rounded font-semibold hover:bg-red-700"
+        >
           Kayıt Ol
         </button>
       </form>
