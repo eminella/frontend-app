@@ -1,6 +1,3 @@
-<div className="bg-red-500 text-white p-4">LAYOUT AKTİF</div>
-
-
 'use client';
 
 import { useState } from 'react';
@@ -12,37 +9,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex min-h-screen font-sans">
       {/* Sol Menü */}
-      <aside className="w-64 bg-gray-900 text-white flex flex-col p-6">
+      <aside className="w-64 bg-gray-900 text-white flex flex-col p-6 relative">
         <h2 className="text-2xl font-bold mb-8">Eminella</h2>
 
         <nav className="space-y-2">
-          {/* Drop Menü Başlangıcı */}
+          {/* Ürünler Dropdown */}
           <div
+            className="relative group"
             onMouseEnter={() => setProductMenuOpen(true)}
             onMouseLeave={() => setProductMenuOpen(false)}
           >
-            <div className="hover:bg-gray-800 p-2 rounded block cursor-pointer">
+            <div className="hover:bg-gray-800 p-2 rounded cursor-pointer flex justify-between items-center">
               📦 Ürünler
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
 
             {isProductMenuOpen && (
-              <div className="ml-4 mt-1 space-y-1">
+              <div className="absolute left-full top-0 ml-2 bg-gray-800 rounded shadow-lg z-20 w-48">
                 <a
                   href="/admin/products"
-                  className="block text-sm hover:bg-gray-800 p-2 rounded"
+                  className="block px-4 py-2 text-sm hover:bg-gray-700"
                 >
                   • Ürün Listesi
                 </a>
                 <a
                   href="/admin/products/new"
-                  className="block text-sm hover:bg-gray-800 p-2 rounded"
+                  className="block px-4 py-2 text-sm hover:bg-gray-700"
                 >
                   • Ürün Ekle
                 </a>
               </div>
             )}
           </div>
-          {/* Drop Menü Sonu */}
 
           <a href="/admin/orders" className="hover:bg-gray-800 p-2 rounded block">
             🧾 Siparişler
@@ -57,7 +57,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Sağ İçerik */}
-      <main className="flex-1 bg-gray-100 p-10">{children}</main>
+      <main className="flex-1 bg-gray-100 p-10">
+        {/* Layout kontrolü */}
+        {/* <div className="bg-red-500 text-white p-4">LAYOUT AKTİF</div> */}
+        {children}
+      </main>
     </div>
   );
 }
