@@ -33,12 +33,12 @@ export default function AdminOrdersPage() {
   const fetchOrders = async () => {
     try {
       const res = await fetch(`${API}/api/orders`);
-      if (!res.ok) throw new Error('Siparişler alınamadı.');
+      if (!res.ok) throw new Error('Siparisler alinmadi.');
       const data = await res.json();
       setOrders(data);
     } catch (err) {
-      alert('Siparişler alınamadı. Lütfen sayfayı yenileyin.');
-      console.error('Siparişler alınamadı:', err);
+      alert('Siparisler alinmadi. Lutfen sayfayi yenileyin.');
+      console.error('Siparisler alinmadi:', err);
     }
   };
 
@@ -52,11 +52,11 @@ export default function AdminOrdersPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
-      if (!res.ok) throw new Error('Durum güncellenemedi.');
+      if (!res.ok) throw new Error('Durum guncellenemedi.');
       await fetchOrders();
     } catch (err) {
-      alert('Durum güncellenemedi. Lütfen tekrar deneyin.');
-      console.error('Durum güncellenemedi:', err);
+      alert('Durum guncellenemedi. Lutfen tekrar deneyin.');
+      console.error('Durum guncellenemedi:', err);
     } finally {
       setLoadingStatusId(null);
     }
@@ -65,7 +65,7 @@ export default function AdminOrdersPage() {
   const getButtonClass = (orderStatus: string, buttonStatus: string) => {
     if (orderStatus === buttonStatus) {
       switch (buttonStatus) {
-        case 'Hazırlanıyor':
+        case 'Hazirlanıyor':
           return 'bg-blue-600 text-white';
         case 'Kargoya Verildi':
           return 'bg-green-600 text-white';
@@ -76,7 +76,7 @@ export default function AdminOrdersPage() {
       }
     } else {
       switch (buttonStatus) {
-        case 'Hazırlanıyor':
+        case 'Hazirlanıyor':
           return 'bg-blue-400 text-white hover:bg-blue-500';
         case 'Kargoya Verildi':
           return 'bg-green-400 text-white hover:bg-green-500';
@@ -90,10 +90,9 @@ export default function AdminOrdersPage() {
 
   return (
     <main className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">📦 Siparişler</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">📦 Siparisler</h1>
 
-
-      {orders.length === 0 && <p className="text-black font-medium">Henüz sipariş yok.</p>}
+      {orders.length === 0 && <p className="text-black font-medium">Henüz siparis yok.</p>}
 
       <ul className="space-y-6">
         {orders.map((order) => (
@@ -110,7 +109,7 @@ export default function AdminOrdersPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                {['Hazırlanıyor', 'Kargoya Verildi', 'Teslim Edildi'].map((status) => (
+                {['Hazirlanıyor', 'Kargoya Verildi', 'Teslim Edildi'].map((status) => (
                   <button
                     key={status}
                     disabled={loadingStatusId !== null}
@@ -119,7 +118,7 @@ export default function AdminOrdersPage() {
                   >
                     {status}
                     {loadingStatusId === order.id && order.status !== status && (
-                      <span className="ml-2 animate-pulse">(Güncelleniyor)</span>
+                      <span className="ml-2 animate-pulse">(Guncelleniyor)</span>
                     )}
                   </button>
                 ))}
