@@ -71,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <img src="/visa.svg" alt="Verified by Visa" className="h-6" />
                 <img src="/master-securecode.svg" alt="Master SecureCODE" className="h-6" />
               </div>
-              <p>© 2024 Eminella | Tüm hakları saklıdır. Kredi kartı bilgileriniz 256-bit SSL ile korunmaktadır.</p>
+              <p>© 2025 Eminella | Tüm hakları saklıdır. Kredi kartı bilgileriniz 256-bit SSL ile korunmaktadır.</p>
             </div>
           </footer>
 
