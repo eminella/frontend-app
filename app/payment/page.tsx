@@ -1,4 +1,3 @@
-// frontend-app/app/payment/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -27,20 +26,16 @@ export default function CheckoutPage() {
   const [cvc, setCvc] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Sepet
   const { cartItems, clearCart } = useCart();
   const router = useRouter();
-
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
 
-  // Adres onayla
   const handleAddressSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert('Adres kaydedildi, ödeme sekmesine geçiliyor');
     setActiveTab(2);
   };
 
-  // Ödeme + Sipariş oluştur
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -96,6 +91,7 @@ export default function CheckoutPage() {
       {/* Adres Formu */}
       {activeTab === 1 && (
         <form onSubmit={handleAddressSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Adres inputları */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Fatura Türü</label>
             <select
@@ -107,7 +103,6 @@ export default function CheckoutPage() {
               <option>Kurumsal Adres</option>
             </select>
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">E-Mail Adresiniz *</label>
             <input
@@ -119,7 +114,6 @@ export default function CheckoutPage() {
               placeholder="example@mail.com"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Ad Soyad *</label>
             <input
@@ -131,7 +125,6 @@ export default function CheckoutPage() {
               placeholder="Adınız Soyadınız"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Ülke</label>
             <select
@@ -142,7 +135,6 @@ export default function CheckoutPage() {
               <option>Türkiye</option>
             </select>
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">İl *</label>
             <input
@@ -154,7 +146,6 @@ export default function CheckoutPage() {
               placeholder="İl"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">İlçe *</label>
             <input
@@ -166,7 +157,6 @@ export default function CheckoutPage() {
               placeholder="İlçe"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Mahalle *</label>
             <input
@@ -178,7 +168,6 @@ export default function CheckoutPage() {
               placeholder="Mahalle"
             />
           </div>
-
           <div className="md:col-span-2">
             <label className="block mb-1 text-sm font-semibold text-gray-900">Adres</label>
             <textarea
@@ -189,7 +178,6 @@ export default function CheckoutPage() {
               placeholder="Adresinizi giriniz"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Posta Kodu</label>
             <input
@@ -200,7 +188,6 @@ export default function CheckoutPage() {
               placeholder="Posta Kodu"
             />
           </div>
-
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Cep Telefonu *</label>
             <input
@@ -212,7 +199,6 @@ export default function CheckoutPage() {
               placeholder="+90 5xx xxx xx xx"
             />
           </div>
-
           <div className="md:col-span-2 flex items-center space-x-2">
             <input
               type="checkbox"
@@ -225,7 +211,6 @@ export default function CheckoutPage() {
               Faturamın farklı bir adrese düzenlenmesini istiyorum
             </label>
           </div>
-
           <div className="md:col-span-2">
             <button
               type="submit"
@@ -241,6 +226,18 @@ export default function CheckoutPage() {
       {activeTab === 2 && (
         <form onSubmit={handlePaymentSubmit} className="space-y-6">
           <h2 className="text-xl font-semibold mb-4">Ödeme Bilgileri</h2>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Kart Üzerindeki Ad Soyad *</label>
+            <input
+              type="text"
+              required
+              value={nameSurname}
+              onChange={e => setNameSurname(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="Kart Üzerindeki Ad Soyad"
+            />
+          </div>
 
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Kart Numarası *</label>
@@ -266,7 +263,6 @@ export default function CheckoutPage() {
                 placeholder="AA/YY"
               />
             </div>
-
             <div>
               <label className="block mb-1 text-sm font-semibold text-gray-900">CVC *</label>
               <input
