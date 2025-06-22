@@ -92,20 +92,20 @@ export default function AdminOrdersPage() {
     <main className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Siparişler</h1>
 
-      {orders.length === 0 && <p>Henüz sipariş yok.</p>}
+      {orders.length === 0 && <p className="text-black font-medium">Henüz sipariş yok.</p>}
 
       <ul className="space-y-6">
         {orders.map((order) => (
           <li key={order.id} className="border p-4 rounded shadow">
             <div className="flex flex-col md:flex-row justify-between mb-2 gap-4">
               <div>
-                <p><strong>ID:</strong> {order.id}</p>
-                <p><strong>Tarih:</strong> {new Date(order.createdAt).toLocaleString('tr-TR')}</p>
-                <p><strong>Müşteri:</strong> {order.customerName || '-'}</p>
-                <p><strong>Adres:</strong> {order.address || '-'}</p>
-                <p><strong>Telefon:</strong> {order.phone || '-'}</p>
-                <p><strong>Toplam:</strong> {order.totalAmount.toFixed(2)} TL</p>
-                <p><strong>Durum:</strong> {order.status}</p>
+                <p className="text-black font-medium"><strong>ID:</strong> {order.id}</p>
+                <p className="text-black font-medium"><strong>Tarih:</strong> {new Date(order.createdAt).toLocaleString('tr-TR')}</p>
+                <p className="text-black font-medium"><strong>Müşteri:</strong> {order.customerName || '-'}</p>
+                <p className="text-black font-medium"><strong>Adres:</strong> {order.address || '-'}</p>
+                <p className="text-black font-medium"><strong>Telefon:</strong> {order.phone || '-'}</p>
+                <p className="text-black font-medium"><strong>Toplam:</strong> {order.totalAmount.toFixed(2)} TL</p>
+                <p className="text-black font-medium"><strong>Durum:</strong> {order.status}</p>
               </div>
 
               <div className="flex flex-col gap-2">
@@ -126,10 +126,10 @@ export default function AdminOrdersPage() {
             </div>
 
             <div>
-              <p><strong>Ürünler:</strong></p>
+              <p className="text-black font-medium"><strong>Ürünler:</strong></p>
               <ul className="list-disc list-inside">
                 {order.products.map((p) => (
-                  <li key={p.id}>
+                  <li key={p.id} className="text-black font-medium">
                     {p.name} - {p.price.toFixed(2)} TL
                   </li>
                 ))}
