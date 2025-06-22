@@ -1,8 +1,9 @@
+// frontend-app/app/admin/layout.tsx
+
 'use client';
 
 import { useState } from 'react';
 import LogoutButton from '@/components/LogoutButton';
-
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isProductMenuOpen, setProductMenuOpen] = useState(false);

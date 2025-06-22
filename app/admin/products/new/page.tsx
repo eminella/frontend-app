@@ -1,3 +1,5 @@
+// frontend-app/app/admin/products/new/page.tsx
+
 'use client';
 
 import { useState } from 'react';
