@@ -34,7 +34,7 @@ export default function AdminProductsPage() {
   }, []);
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-white min-h-screen text-gray-900">
       <h1 className="text-2xl font-bold mb-6">Admin Ürün Yönetimi</h1>
 
       {loading ? (
@@ -42,14 +42,14 @@ export default function AdminProductsPage() {
       ) : products.length === 0 ? (
         <p>Henüz ürün eklenmemiş.</p>
       ) : (
-        <table className="w-full text-left border border-gray-300">
+        <table className="w-full text-left border border-gray-300 text-base">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-4 py-2 font-bold">ID</th>
-              <th className="px-4 py-2 font-bold">Görsel</th>
-              <th className="px-4 py-2 font-bold">İsim</th>
-              <th className="px-4 py-2 font-bold">Fiyat</th>
-              <th className="px-4 py-2 font-bold">Kategori</th>
+              <th className="px-4 py-2 font-bold text-gray-900">ID</th>
+              <th className="px-4 py-2 font-bold text-gray-900">Görsel</th>
+              <th className="px-4 py-2 font-bold text-gray-900">İsim</th>
+              <th className="px-4 py-2 font-bold text-gray-900">Fiyat</th>
+              <th className="px-4 py-2 font-bold text-gray-900">Kategori</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +58,7 @@ export default function AdminProductsPage() {
                 key={product.id}
                 className="border-t border-gray-200 hover:bg-gray-50"
               >
-                <td className="px-4 py-2">{product.id}</td>
+                <td className="px-4 py-2 font-medium">{product.id}</td>
                 <td className="px-4 py-2">
                   {product.imageUrl ? (
                     <img
@@ -70,9 +70,9 @@ export default function AdminProductsPage() {
                     '-'
                   )}
                 </td>
-                <td className="px-4 py-2 font-medium">{product.name}</td>
-                <td className="px-4 py-2 font-medium">{product.price} ₺</td>
-                <td className="px-4 py-2 font-medium">{product.category}</td>
+                <td className="px-4 py-2 font-semibold">{product.name}</td>
+                <td className="px-4 py-2 font-semibold">{product.price} ₺</td>
+                <td className="px-4 py-2 font-semibold">{product.category}</td>
               </tr>
             ))}
           </tbody>
