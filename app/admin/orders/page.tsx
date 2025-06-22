@@ -7,6 +7,7 @@ type Product = {
   id: number;
   name: string;
   price: number;
+  imageUrl?: string;
 };
 
 type Order = {
@@ -119,10 +120,17 @@ export default function AdminOrdersPage() {
                   {new Date(order.createdAt).toLocaleString('tr-TR')}
                 </td>
                 <td className="px-4 py-2 text-gray-900 font-medium">
-                  <ul className="list-disc list-inside">
+                  <ul className="list-none space-y-2">
                     {order.products.map((p) => (
-                      <li key={p.id}>
-                        {p.name} – {p.price.toFixed(2)} TL
+                      <li key={p.id} className="flex items-center gap-2">
+                        {p.imageUrl && (
+                          <img
+                            src={p.imageUrl}
+                            alt={p.name}
+                            className="w-10 h-10 object-cover rounded"
+                          />
+                        )}
+                        <span>{p.name} – {p.price.toFixed(2)} TL</span>
                       </li>
                     ))}
                   </ul>
