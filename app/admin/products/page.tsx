@@ -35,32 +35,48 @@ export default function AdminProductsPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Ürün Yönetimi</h1>
+      <h1 className="text-2xl font-bold mb-6">Admin Ürün Yönetimi</h1>
 
       {loading ? (
         <p>Yükleniyor...</p>
       ) : products.length === 0 ? (
         <p>Henüz ürün eklenmemiş.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="border rounded-xl p-4 shadow hover:shadow-lg transition"
-            >
-              {product.imageUrl && (
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded"
-                />
-              )}
-              <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
-              <p className="text-green-600 font-bold">{product.price} ₺</p>
-              <p className="text-sm text-gray-500">{product.category}</p>
-            </div>
-          ))}
-        </div>
+        <table className="w-full text-left border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-2 font-bold">ID</th>
+              <th className="px-4 py-2 font-bold">Görsel</th>
+              <th className="px-4 py-2 font-bold">İsim</th>
+              <th className="px-4 py-2 font-bold">Fiyat</th>
+              <th className="px-4 py-2 font-bold">Kategori</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr
+                key={product.id}
+                className="border-t border-gray-200 hover:bg-gray-50"
+              >
+                <td className="px-4 py-2">{product.id}</td>
+                <td className="px-4 py-2">
+                  {product.imageUrl ? (
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="h-12 w-12 object-cover rounded"
+                    />
+                  ) : (
+                    '-'
+                  )}
+                </td>
+                <td className="px-4 py-2 font-medium">{product.name}</td>
+                <td className="px-4 py-2 font-medium">{product.price} ₺</td>
+                <td className="px-4 py-2 font-medium">{product.category}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
