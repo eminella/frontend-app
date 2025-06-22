@@ -1,11 +1,14 @@
+// frontend-app/app/payment/page.tsx
 'use client';
 
 import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutPage() {
   const [activeTab, setActiveTab] = useState(1); // 1: Adres, 2: Ödeme
 
-  // Adres form state
+  // Adres bilgileri
   const [invoiceType, setInvoiceType] = useState('Bireysel Adres');
   const [email, setEmail] = useState('');
   const [nameSurname, setNameSurname] = useState('');
@@ -18,25 +21,53 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState('');
   const [invoiceDifferentAddress, setInvoiceDifferentAddress] = useState(false);
 
-  // Ödeme form state (örnek)
+  // Ödeme bilgileri
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvc, setCvc] = useState('');
+  const [loading, setLoading] = useState(false);
 
+  // Sepet
+  const { cartItems, clearCart } = useCart();
+  const router = useRouter();
+
+  const totalAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+  // Adres onayla
   const handleAddressSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // TODO: Backend’e gönderme işlemi
-    // Başarılıysa:
     alert('Adres kaydedildi, ödeme sekmesine geçiliyor');
     setActiveTab(2);
   };
 
-  const handlePaymentSubmit = (e: React.FormEvent) => {
+  // Ödeme + Sipariş oluştur
+  const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // TODO: Ödeme işlemi
-    alert('Ödeme yapıldı, teşekkürler!');
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cartItems,
+          totalAmount,
+          customerName: nameSurname,
+          address: `${neighborhood}, ${district}, ${city}`,
+          phone,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Sipariş gönderilemedi');
+
+      clearCart();
+      alert('Ödeme başarılı, siparişiniz oluşturuldu!');
+      router.push('/store');
+    } catch (err) {
+      alert('Bir hata oluştu. Sipariş gönderilemedi.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,9 +76,7 @@ export default function CheckoutPage() {
       <div className="flex border-b mb-6">
         <button
           className={`flex-1 py-2 font-semibold text-center ${
-            activeTab === 1
-              ? 'border-b-4 border-red-600 text-red-600'
-              : 'text-gray-600 hover:text-red-600'
+            activeTab === 1 ? 'border-b-4 border-red-600 text-red-600' : 'text-gray-600 hover:text-red-600'
           }`}
           onClick={() => setActiveTab(1)}
         >
@@ -55,21 +84,18 @@ export default function CheckoutPage() {
         </button>
         <button
           className={`flex-1 py-2 font-semibold text-center ${
-            activeTab === 2
-              ? 'border-b-4 border-red-600 text-red-600'
-              : 'text-gray-600 hover:text-red-600'
+            activeTab === 2 ? 'border-b-4 border-red-600 text-red-600' : 'text-gray-600 hover:text-red-600'
           }`}
           onClick={() => setActiveTab(2)}
-          disabled={activeTab === 1} // İstersen burayı kaldırabilirsin
+          disabled={activeTab === 1}
         >
           Ödeme Bilgileri
         </button>
       </div>
 
-      {/* İçerik */}
+      {/* Adres Formu */}
       {activeTab === 1 && (
         <form onSubmit={handleAddressSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Fatura Türü */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Fatura Türü</label>
             <select
@@ -82,7 +108,6 @@ export default function CheckoutPage() {
             </select>
           </div>
 
-          {/* E-Mail */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">E-Mail Adresiniz *</label>
             <input
@@ -95,7 +120,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Ad Soyad */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Ad Soyad *</label>
             <input
@@ -108,9 +132,8 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Ülke */}
           <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-900">Ülke Seçiniz</label>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Ülke</label>
             <select
               value={country}
               onChange={e => setCountry(e.target.value)}
@@ -120,9 +143,8 @@ export default function CheckoutPage() {
             </select>
           </div>
 
-          {/* İl */}
           <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-900">İl Seçiniz *</label>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">İl *</label>
             <input
               type="text"
               required
@@ -133,7 +155,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* İlçe */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">İlçe *</label>
             <input
@@ -146,7 +167,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Mahalle */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Mahalle *</label>
             <input
@@ -159,7 +179,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Adres */}
           <div className="md:col-span-2">
             <label className="block mb-1 text-sm font-semibold text-gray-900">Adres</label>
             <textarea
@@ -171,7 +190,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Posta Kodu */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Posta Kodu</label>
             <input
@@ -183,7 +201,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Cep Telefonu */}
           <div>
             <label className="block mb-1 text-sm font-semibold text-gray-900">Cep Telefonu *</label>
             <input
@@ -196,7 +213,6 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Fatura farklı adres checkbox */}
           <div className="md:col-span-2 flex items-center space-x-2">
             <input
               type="checkbox"
@@ -210,7 +226,6 @@ export default function CheckoutPage() {
             </label>
           </div>
 
-          {/* Kaydet Butonu */}
           <div className="md:col-span-2">
             <button
               type="submit"
@@ -222,6 +237,7 @@ export default function CheckoutPage() {
         </form>
       )}
 
+      {/* Ödeme Formu */}
       {activeTab === 2 && (
         <form onSubmit={handlePaymentSubmit} className="space-y-6">
           <h2 className="text-xl font-semibold mb-4">Ödeme Bilgileri</h2>
@@ -267,8 +283,9 @@ export default function CheckoutPage() {
           <button
             type="submit"
             className="w-full bg-green-600 text-white py-3 rounded font-semibold hover:bg-green-700 transition"
+            disabled={loading}
           >
-            ÖDEMEYİ TAMAMLA
+            {loading ? 'İşleniyor...' : 'ÖDEMEYİ TAMAMLA'}
           </button>
         </form>
       )}
