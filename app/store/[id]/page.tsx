@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import classNames from 'classnames';
+import ImageModal from '@/components/ImageModal';            // 👈 yeni import
 
 type Product = {
   id: number;
@@ -24,6 +25,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [showModal, setShowModal] = useState(false);        // 👈 modal state
   const { addToCart } = useCart();
   const router = useRouter();
   const BASE_URL =
@@ -32,9 +34,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(
-          `${BASE_URL}/api/products/${params.id}`
-        );
+        const res = await fetch(`${BASE_URL}/api/products/${params.id}`);
         if (!res.ok) return notFound();
         const data = await res.json();
         setProduct(data);
@@ -61,18 +61,16 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           <img
             src={product.imageUrl || '/default-product.jpg'}
             alt={product.name}
-            className="w-full max-h-[400px] object-contain rounded-xl border"
+            className="w-full max-h-[400px] object-contain rounded-xl border cursor-pointer"
+            onClick={() => setShowModal(true)}               // 👈 tıklayınca modal
           />
         </div>
 
         {/* Ürün Bilgileri */}
         <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-2">
-            {product.name}
-          </h1>
+          <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
           <p className="text-sm text-gray-500 mb-2">
-            Ürün Kodu: EM
-            {product.id.toString().padStart(6, '0')}
+            Ürün Kodu: EM{product.id.toString().padStart(6, '0')}
           </p>
 
           <div className="mb-4">
@@ -87,9 +85,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           {/* Miktar + Sepete Ekle */}
           <div className="flex items-center gap-3 mb-6">
             <button
-              onClick={() =>
-                setQuantity((q) => Math.max(1, q - 1))
-              }
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               className="w-8 h-8 text-lg rounded-full border border-gray-300"
             >
               –
@@ -135,22 +131,33 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         <div className="text-gray-700 text-sm leading-relaxed">
           {activeTab === 'Ürün Açıklaması' && (
             <p>
-              {product.name} ürünü yüksek kalite
-              malzemelerle üretilmiştir. Suya ve
-              kimyasala temas etmemelidir.
+              {product.name} ürünü yüksek kalite malzemelerle üretilmiştir. Suya
+              ve kimyasala temas etmemelidir.
             </p>
           )}
           {activeTab === 'Ödeme Seçenekleri' && (
             <p>Kredi kartı, havale ve kapıda ödeme seçenekleri mevcuttur.</p>
           )}
           {activeTab === 'Tavsiye Et' && (
-            <p>Bu ürünü beğendiysen, sosyal medya üzerinden arkadaşlarına öner!</p>
+            <p>
+              Bu ürünü beğendiysen, sosyal medya üzerinden arkadaşlarına öner!
+            </p>
           )}
           {activeTab === 'İade Koşulları' && (
-            <p>Ürünü 14 gün içinde iade edebilirsin. Koşulsuz iade garantisi.</p>
+            <p>
+              Ürünü 14 gün içinde iade edebilirsin. Koşulsuz iade garantisi.
+            </p>
           )}
         </div>
       </div>
+
+      {/* 👇 Modal */}
+      {showModal && product.imageUrl && (
+        <ImageModal
+          imageUrl={product.imageUrl}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </main>
   );
 }
