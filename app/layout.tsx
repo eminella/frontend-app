@@ -12,8 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body className="flex flex-col min-h-screen bg-white text-black">
-
+      <body className="flex flex-col min-h-screen">
         <CartProvider>
           {/* *** HEADER COMPONENT *** */}
           <Header />
