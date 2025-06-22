@@ -1,3 +1,6 @@
+<div className="bg-red-500 text-white p-4">LAYOUT AKTİF</div>
+
+
 'use client';
 
 import { useState } from 'react';
