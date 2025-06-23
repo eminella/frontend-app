@@ -5,10 +5,12 @@ import Link from 'next/link';
 
 export default function HakkimizdaPage() {
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <main className="max-w-4xl mx-auto px-4 py-8 bg-white dark:bg-white">
       {/* Breadcrumb */}
       <div className="text-sm text-black mb-6">
-        <Link href="/" className="hover:underline">Anasayfa</Link> <span className="mx-1">/</span> <span className="text-black">Hakkımızda</span>
+        <Link href="/" className="hover:underline">Anasayfa</Link>
+        <span className="mx-1">/</span>
+        <span className="text-black">Hakkımızda</span>
       </div>
 
       {/* Sayfa Başlığı */}
