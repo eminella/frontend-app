@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
 @import "react-quill/dist/quill.snow.css";
 @import "tailwindcss";
 
@@ -7,19 +8,17 @@
   --foreground: #171717;
 }
 
-/* Eğer dark mode etkisiz kalsın istiyorsan aşağıdaki satırları SİL veya yoruma al */
+/* Dark mode etkisiz */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;
-    /* Eskiden: #0a0a0a */
     --foreground: #171717;
-    /* Eskiden: #ededed */
   }
 }
 
-/* Tüm sayfa için arka plan ve yazı rengi zorunlu tanımlandı */
+/* Tüm site arka plan ve yazı rengi + font */
 body {
   background: var(--background) !important;
   color: var(--foreground) !important;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Ubuntu', Arial, Helvetica, sans-serif;
 }
