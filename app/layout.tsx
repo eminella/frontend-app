@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <h5 className="font-bold mb-4 text-gray-800">Müşteri Hizmetleri</h5>
                 <p className="flex items-center text-sm text-gray-700 mb-4">
                   <span className="inline-block w-5 h-5 mr-2 bg-phone-icon bg-contain"></span>
-                  444 0 878
+                  0850 335 12 78
                 </p>
                 <div className="flex space-x-4 mb-4">
                   <a href="#" className="inline-block w-6 h-6 bg-instagram-icon bg-contain" aria-label="Instagram"></a>
@@ -69,10 +69,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="container mx-auto px-6 mt-8 border-t pt-6 text-center text-xs text-gray-700">
               <div className="flex flex-wrap justify-center items-center gap-4 mb-4">
                 <img src="/visa.svg" alt="Verified by Visa" className="h-6" />
-                <img src="/master-securecode.svg" alt="Master SecureCODE" className="h-6" />
+                {/* MasterCard logoları kaldırıldı */}
               </div>
               <p>© 2025 Eminella | Tüm hakları saklıdır. Kredi kartı bilgileriniz 256-bit SSL ile korunmaktadır.</p>
             </div>
+
           </footer>
 
           <MiniCart />
