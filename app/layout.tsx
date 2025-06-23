@@ -18,9 +18,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartProvider>
           <Header />
 
-          <main className="flex-grow">
-            {children}
-          </main>
+          <main className="flex-grow bg-white">
+  {children}
+</main>
+
 
           <footer className="bg-white py-12">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
