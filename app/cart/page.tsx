@@ -12,13 +12,12 @@ export default function CartPage() {
   const router = useRouter();
   const { cartItems, removeFromCart } = useCart();
 
-  // ara toplam
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-  const shippingCost = 19.99; // sabit kargo
+  const shippingCost = 19.99;
 
   return (
     <main className="bg-gray-50 min-h-screen p-8">
@@ -26,13 +25,21 @@ export default function CartPage() {
         🛒 <span>Sepetim</span>
       </h1>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Ürün listesi */}
-        <div className="md:col-span-2 space-y-4">
-          {cartItems.length === 0 ? (
-            <p className="text-gray-600">Sepetiniz boş.</p>
-          ) : (
-            cartItems.map((item) => (
+      {cartItems.length === 0 ? (
+        <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow text-center space-y-6">
+          <p className="text-gray-600 text-lg">Sepetiniz şu anda boş.</p>
+          <Link
+            href="/"
+            className="inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md font-semibold transition"
+          >
+            🛍 Alışverişe Devam Et
+          </Link>
+        </div>
+      ) : (
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Ürün listesi */}
+          <div className="md:col-span-2 space-y-4">
+            {cartItems.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between p-4 bg-white rounded-lg shadow"
@@ -67,47 +74,46 @@ export default function CartPage() {
                   </button>
                 </div>
               </div>
-            ))
-          )}
+            ))}
+          </div>
+
+          {/* Özet */}
+          <div className="bg-white p-6 rounded-lg shadow space-y-4">
+            <h2 className="text-lg font-semibold text-gray-800">Özet</h2>
+
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>Ara Toplam</span>
+              <span>{totalPrice.toFixed(2)} ₺</span>
+            </div>
+
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>Kargo Ücreti</span>
+              <span>{shippingCost.toFixed(2)} ₺</span>
+            </div>
+
+            <hr />
+
+            <div className="flex justify-between font-bold text-lg text-gray-800">
+              <span>Toplam</span>
+              <span>{(totalPrice + shippingCost).toFixed(2)} ₺</span>
+            </div>
+
+            <button
+              onClick={() => router.push('/checkout')}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md font-semibold"
+            >
+              Satın Al
+            </button>
+
+            <Link
+              href="/store"
+              className="block text-center text-sm text-gray-500 hover:underline"
+            >
+              🛍 Alışverişe Devam Et
+            </Link>
+          </div>
         </div>
-
-        {/* Özet */}
-        <div className="bg-white p-6 rounded-lg shadow space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">Özet</h2>
-
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Ara Toplam</span>
-            <span>{totalPrice.toFixed(2)} ₺</span>
-          </div>
-
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Kargo Ücreti</span>
-            <span>{shippingCost.toFixed(2)} ₺</span>
-          </div>
-
-          <hr />
-
-          <div className="flex justify-between font-bold text-lg text-gray-800">
-            <span>Toplam</span>
-            <span>{(totalPrice + shippingCost).toFixed(2)} ₺</span>
-          </div>
-
-          <button
-            onClick={() => router.push('/checkout')} // 🔑 yönlendirme
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md font-semibold"
-            disabled={cartItems.length === 0}
-          >
-            Satın Al
-          </button>
-
-          <Link
-            href="/store"
-            className="block text-center text-sm text-gray-500 hover:underline"
-          >
-            🛍 Alışverişe Devam Et
-          </Link>
-        </div>
-      </div>
+      )}
     </main>
   );
 }
