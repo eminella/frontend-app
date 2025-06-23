@@ -28,7 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <h5 className="font-bold mb-4 text-gray-800">Eminella</h5>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li><Link href="/hakkimizda">Hakkımızda</Link></li>
-                  <li><Link href="/lisanslarimiz">Lisanslarımız</Link></li>
                   <li><Link href="/bize-ulasin">Bize Ulaşın</Link></li>
                 </ul>
               </div>
