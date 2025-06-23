@@ -1,3 +1,4 @@
+// frontend-app/app/checkout/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -86,12 +87,91 @@ export default function CheckoutPage() {
         </button>
       </div>
 
-      {/* Adres Formu */}
       {activeTab === 1 && (
         <form onSubmit={handleAddressSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* ...adres alanları aynı kalıyor... */}
-          {/* Burayı değiştirmiyoruz */}
-          {/* ... */}
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Ad Soyad *</label>
+            <input
+              type="text"
+              required
+              value={nameSurname}
+              onChange={e => setNameSurname(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="Ad Soyad"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Telefon *</label>
+            <input
+              type="tel"
+              required
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="05XXXXXXXXX"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Şehir *</label>
+            <input
+              type="text"
+              required
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="İstanbul"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">İlçe *</label>
+            <input
+              type="text"
+              required
+              value={district}
+              onChange={e => setDistrict(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="Fatih"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Mahalle *</label>
+            <input
+              type="text"
+              required
+              value={neighborhood}
+              onChange={e => setNeighborhood(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="Cibali Mahallesi"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Posta Kodu</label>
+            <input
+              type="text"
+              value={postalCode}
+              onChange={e => setPostalCode(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              placeholder="34083"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block mb-1 text-sm font-semibold text-gray-900">Adres *</label>
+            <textarea
+              required
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
+              rows={3}
+              placeholder="Açık adresinizi girin"
+            />
+          </div>
+
           <div className="md:col-span-2">
             <button
               type="submit"
@@ -103,7 +183,6 @@ export default function CheckoutPage() {
         </form>
       )}
 
-      {/* Ödeme Formu */}
       {activeTab === 2 && (
         <form onSubmit={handlePaymentSubmit} className="space-y-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Ödeme Bilgileri</h2>
