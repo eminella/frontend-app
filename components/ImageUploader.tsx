@@ -29,6 +29,7 @@ export default function ImageUploader({
         maxNumber={maxNumber}
         dataURLKey="data_url"
         acceptType={['jpg', 'jpeg', 'png', 'webp']}
+        inputProps={{ name: 'images' }} // 🔥 EKLENDİ! multer bunu istiyor
       >
         {({
           imageList,
