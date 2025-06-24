@@ -1,9 +1,9 @@
 // frontend-app/app/admin/products/new/page.tsx
-
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImageUploader from '@/components/ImageUploader';
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -26,9 +26,7 @@ export default function NewProductPage() {
     formData.append('name', name);
     formData.append('price', price);
     formData.append('category', category);
-    images.forEach((img) => {
-      formData.append('images', img); // multiple
-    });
+    images.forEach((img) => formData.append('images', img));
 
     try {
       setLoading(true);
@@ -36,9 +34,7 @@ export default function NewProductPage() {
         method: 'POST',
         body: formData,
       });
-
       if (!res.ok) throw new Error('Ürün eklenemedi');
-
       router.push('/admin/products');
     } catch (err) {
       alert('Ürün eklenemedi.');
@@ -51,33 +47,39 @@ export default function NewProductPage() {
   return (
     <main className="max-w-xl mx-auto bg-white p-6 shadow rounded mt-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-900">🆕 Yeni Ürün Ekle</h1>
+
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Ürün adı */}
         <div>
           <label className="block font-medium text-gray-900 mb-1">Ürün Adı</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:ring-2 focus:ring-yellow-600"
             required
           />
         </div>
+
+        {/* Fiyat */}
         <div>
           <label className="block font-medium text-gray-900 mb-1">Fiyat (TL)</label>
           <input
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:ring-2 focus:ring-yellow-600"
             required
           />
         </div>
+
+        {/* Kategori */}
         <div>
           <label className="block font-medium text-gray-900 mb-1">Kategori</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:ring-2 focus:ring-yellow-600"
           >
             <option>Kolye</option>
             <option>Küpe</option>
@@ -85,26 +87,22 @@ export default function NewProductPage() {
             <option>Yüzük</option>
           </select>
         </div>
+
+        {/* Görsel uploader */}
         <div>
-          <label className="block font-medium text-gray-900 mb-1">Ürün Görselleri (3 adet)</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => {
-              const files = Array.from(e.target.files || []);
-              setImages(files.slice(0, 3)); // En fazla 3 görsel al
-            }}
-            className="w-full text-gray-900"
-            required
-          />
+          <label className="block font-medium text-gray-900 mb-1">
+            Ürün Görselleri (maks. 3)
+          </label>
+          <ImageUploader onImagesChange={(imgs) => setImages(imgs)} />
         </div>
+
+        {/* Gönder */}
         <button
           type="submit"
           disabled={loading}
           className="bg-yellow-700 hover:bg-yellow-800 text-white px-4 py-2 rounded font-semibold"
         >
-          {loading ? 'Yükleniyor...' : 'Ürün Ekle'}
+          {loading ? 'Yükleniyor…' : 'Ürün Ekle'}
         </button>
       </form>
     </main>
