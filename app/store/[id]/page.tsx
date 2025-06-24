@@ -171,3 +171,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
+
+//.. HER ZERRESİNE DEĞİCEK KORKMUYORUM SADECE MERAK EDİYORUM NE ZAMAN DİYE VESSELAM...
