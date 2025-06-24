@@ -12,12 +12,12 @@ export default function NewProductPage() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('Kolye');
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !price || !image) {
+    if (!name || !price || images.length === 0) {
       alert('Tüm alanları doldurun.');
       return;
     }
@@ -26,7 +26,9 @@ export default function NewProductPage() {
     formData.append('name', name);
     formData.append('price', price);
     formData.append('category', category);
-    formData.append('image', image);
+    images.forEach((img) => {
+      formData.append('images', img); // multiple
+    });
 
     try {
       setLoading(true);
@@ -84,11 +86,15 @@ export default function NewProductPage() {
           </select>
         </div>
         <div>
-          <label className="block font-medium text-gray-900 mb-1">Ürün Görseli</label>
+          <label className="block font-medium text-gray-900 mb-1">Ürün Görselleri (3 adet)</label>
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
+            multiple
+            onChange={(e) => {
+              const files = Array.from(e.target.files || []);
+              setImages(files.slice(0, 3)); // En fazla 3 görsel al
+            }}
             className="w-full text-gray-900"
             required
           />
