@@ -13,6 +13,7 @@ type Product = {
   price: number;
   category: string;
   imageUrls: string[];
+  description?: string;  // description alanı eklendi
 };
 
 const tabs = [
@@ -165,8 +166,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           <div className="text-gray-700 text-sm leading-relaxed">
             {activeTab === 'Ürün Açıklaması' && (
               <p>
-                {product.name} ürünü yüksek kalite malzemelerle üretilmiştir.
-                Suya ve kimyasala temas etmemelidir.
+                {product.description ||
+                  `${product.name} ürünü yüksek kalite malzemelerle üretilmiştir. Suya ve kimyasala temas etmemelidir.`}
               </p>
             )}
             {activeTab === 'Ödeme Seçenekleri' && (
