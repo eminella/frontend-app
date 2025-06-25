@@ -1,3 +1,4 @@
+// frontend-app/app/store/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
@@ -13,7 +14,8 @@ type Product = {
   name: string;
   price: number;
   category: string;
-  imageUrl?: string;
+  imageUrls: string[];
+  imageUrl?: string; // İlk görsel için opsiyonel
 };
 
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
@@ -33,7 +35,10 @@ export default function StorePage() {
         if (Array.isArray(data)) {
           const cleanData = data.map(item => ({
             ...item,
-            imageUrl: item.imageUrl?.trim(),
+            imageUrl:
+              item.imageUrls && item.imageUrls.length > 0
+                ? item.imageUrls[0].trim()
+                : '',
           }));
           setProducts(cleanData);
         }
