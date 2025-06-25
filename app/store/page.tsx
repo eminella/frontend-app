@@ -1,4 +1,3 @@
-// frontend-app/app/store/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
@@ -9,13 +8,17 @@ import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 
+import StarRating from '@/components/StarRating'; // Yıldız bileşeni
+
 type Product = {
   id: number;
   name: string;
   price: number;
   category: string;
   imageUrls: string[];
-  imageUrl?: string; // İlk görsel için opsiyonel
+  imageUrl?: string;
+  rating?: number;
+  reviewCount?: number;
 };
 
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
@@ -35,10 +38,9 @@ export default function StorePage() {
         if (Array.isArray(data)) {
           const cleanData = data.map(item => ({
             ...item,
-            imageUrl:
-              item.imageUrls && item.imageUrls.length > 0
-                ? item.imageUrls[0].trim()
-                : '',
+            imageUrl: item.imageUrls && item.imageUrls.length > 0 ? item.imageUrls[0].trim() : '',
+            rating: item.rating ?? 4.5, // varsa gerçek rating yoksa 4.5
+            reviewCount: item.reviewCount ?? 11262, // varsa gerçek yorum yoksa örnek sayı
           }));
           setProducts(cleanData);
         }
@@ -46,7 +48,7 @@ export default function StorePage() {
       .catch(err => console.error('Ürünler yüklenemedi:', err));
   }, [BASE_URL]);
 
-  const filtered =
+  const filteredProducts =
     selectedCategory === 'Tümü'
       ? products
       : products.filter(p => p.category === selectedCategory);
@@ -79,17 +81,17 @@ export default function StorePage() {
 
       {/* Ürün Kartları */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        {filtered.map(p => (
+        {filteredProducts.map(product => (
           <div
-            key={p.id}
+            key={product.id}
             className="border rounded-2xl shadow p-4 flex flex-col h-full relative"
           >
             {/* Detay sayfasına link */}
-            <Link href={`/store/${p.id}`} className="block relative h-48 w-full mb-4">
-              {p.imageUrl ? (
+            <Link href={`/store/${product.id}`} className="block relative h-48 w-full mb-4">
+              {product.imageUrl ? (
                 <Image
-                  src={p.imageUrl}
-                  alt={p.name}
+                  src={product.imageUrl}
+                  alt={product.name}
                   fill
                   className="object-contain rounded-xl"
                 />
@@ -100,15 +102,22 @@ export default function StorePage() {
               )}
             </Link>
 
-            <h3 className="text-lg font-semibold mb-2 text-black opacity-100">{p.name}</h3>
+            <h3 className="text-lg font-semibold mb-1 text-black opacity-100">{product.name}</h3>
+
+            {/* Yıldız ve yorum */}
+            <div className="flex items-center gap-2 mb-2">
+              <StarRating rating={product.rating ?? 0} />
+              <span className="text-sm text-gray-500">({product.reviewCount ?? 0})</span>
+            </div>
+
             <p className="text-xl font-bold text-green-600 mb-4 text-black opacity-100">
-              {p.price.toFixed(2)} ₺
+              {product.price.toFixed(2)} ₺
             </p>
 
             <button
-              onClick={() => handleAddToCartAndRedirect(p)}
-              className="mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4 
-                         bg-white text-red-600 border border-red-600 
+              onClick={() => handleAddToCartAndRedirect(product)}
+              className="mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4
+                         bg-white text-red-600 border border-red-600
                          hover:bg-red-600 hover:text-white hover:shadow-md transition"
             >
               Sepete Ekle
