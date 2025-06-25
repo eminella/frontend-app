@@ -28,7 +28,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isMiniCartOpen, setMiniCartOpen] = useState(false);
 
-  // 🛠️ Mount olduğunda localStorage’dan yükle
+  // Mount olduğunda localStorage’dan yükle
   useEffect(() => {
     const json = localStorage.getItem('eminellaCart');
     if (json) {
@@ -38,7 +38,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // 🛠️ cartItems değiştiğinde localStorage’a kaydet
+  // cartItems değiştiğinde localStorage’a kaydet
   useEffect(() => {
     localStorage.setItem('eminellaCart', JSON.stringify(cartItems));
   }, [cartItems]);
