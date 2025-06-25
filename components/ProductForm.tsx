@@ -4,7 +4,6 @@
 import { useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
 import { Loader2, Plus } from 'lucide-react';
-import { useState } from 'react';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -18,7 +17,7 @@ type FormValues = {
   price: number;
   vat: number;
   description: string;
-  image: FileList;
+  images: FileList;  // <-- Çoklu dosya için images
 };
 
 const stockUnits = ['Adet', 'Çift', 'Kg', 'Metre'];
@@ -39,14 +38,16 @@ export default function ProductForm() {
     },
   });
 
-  const imageFile = watch('image')?.[0];
+  const imageFiles = watch('images');
 
   const onSubmit = async (data: FormValues) => {
     const fd = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
-      if (key === 'image' && value instanceof FileList) {
-        fd.append('image', value[0]);
+      if (key === 'images' && value instanceof FileList) {
+        for (let i = 0; i < value.length; i++) {
+          fd.append('images', value[i]);  // Çoklu dosya olarak ekle
+        }
       } else {
         fd.append(key, String(value));
       }
@@ -146,16 +147,17 @@ export default function ProductForm() {
 
       {/* Görsel */}
       <div>
-        <label className="block font-bold mb-1">Ürün Görseli</label>
+        <label className="block font-bold mb-1">Ürün Görselleri</label>
         <input
           type="file"
           accept="image/*"
-          {...register('image', { required: true })}
+          multiple
+          {...register('images', { required: true })}
           className="text-gray-300"
         />
-        {imageFile && (
+        {imageFiles && imageFiles.length > 0 && (
           <p className="text-sm text-green-400 font-bold mt-1">
-            Seçilen dosya: {imageFile.name}
+            {imageFiles.length} dosya seçildi
           </p>
         )}
       </div>
