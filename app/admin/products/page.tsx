@@ -8,7 +8,7 @@ type Product = {
   name: string;
   price: number;
   category: string;
-  imageUrl?: string;
+  imageUrls: string[];  // Çoklu görsel dizisi
 };
 
 export default function AdminProductsPage() {
@@ -81,9 +81,9 @@ export default function AdminProductsPage() {
               >
                 <td className="px-4 py-2 font-medium">{product.id}</td>
                 <td className="px-4 py-2">
-                  {product.imageUrl ? (
+                  {product.imageUrls && product.imageUrls.length > 0 ? (
                     <img
-                      src={product.imageUrl}
+                      src={product.imageUrls[0]}
                       alt={product.name}
                       className="h-12 w-12 object-cover rounded"
                     />
