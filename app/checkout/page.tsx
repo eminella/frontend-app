@@ -10,7 +10,6 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
-  const [phone, setPhone] = useState('');
 
   // Giriş formu submit
   const handleLogin = (e: React.FormEvent) => {
@@ -72,18 +71,6 @@ export default function CheckoutPage() {
               placeholder="Şifrenizi giriniz"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded text-gray-900"
-            />
-            <input
-              type="tel"
-              required
-              maxLength={11}
-              placeholder="05XXXXXXXXX"
-              value={phone}
-              onChange={e => {
-                const onlyNums = e.target.value.replace(/\D/g, '');
-                setPhone(onlyNums);
-              }}
               className="w-full px-3 py-2 border border-gray-300 rounded text-gray-900"
             />
             <div className="flex items-center justify-between text-sm">

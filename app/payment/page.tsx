@@ -29,6 +29,13 @@ export default function CheckoutPage() {
   const router = useRouter();
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
 
+  // Telefon alanı için sadece rakam kabul eden ve max 11 karakter sınırlaması
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    setPhone(value);
+  };
+
   const handleAddressSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert('Adres kaydedildi, ödeme sekmesine geçiliyor');
@@ -135,7 +142,7 @@ export default function CheckoutPage() {
               type="tel"
               required
               value={phone}
-              onChange={e => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
               className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
               placeholder="05XXXXXXXXX"
             />
