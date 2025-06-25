@@ -11,12 +11,13 @@ export default function NewProductPage() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('Kolye');
+  const [description, setDescription] = useState(''); // description eklendi
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !price || images.length === 0) {
+    if (!name || !price || images.length === 0 || !description) {
       alert('Tüm alanları doldurun.');
       return;
     }
@@ -25,6 +26,7 @@ export default function NewProductPage() {
     formData.append('name', name);
     formData.append('price', price);
     formData.append('category', category);
+    formData.append('description', description); // description gönderiliyor
     images.forEach((img) => formData.append('images', img));
 
     try {
@@ -85,6 +87,18 @@ export default function NewProductPage() {
             <option>Bileklik</option>
             <option>Yüzük</option>
           </select>
+        </div>
+
+        {/* Ürün Açıklaması */}
+        <div>
+          <label className="block font-medium text-gray-900 mb-1">Ürün Açıklaması</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full border border-gray-300 px-3 py-2 rounded text-gray-900 focus:ring-2 focus:ring-yellow-600"
+            rows={3}
+            required
+          />
         </div>
 
         {/* Görsel uploader */}

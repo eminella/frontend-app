@@ -5,7 +5,7 @@ import { notFound, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import classNames from 'classnames';
 
-import ProductGallery from '@/components/ProductGallery';
+import ImageModal from '@/components/ImageModal';
 
 type Product = {
   id: number;
@@ -30,6 +30,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
+  // Modal için state'ler
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalSrc, setModalSrc] = useState('');
+  const [mainImage, setMainImage] = useState<string>('');
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -37,6 +42,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         if (!res.ok) return notFound();
         const data = await res.json();
         setProduct(data);
+        setMainImage(data.imageUrls[0]); // Ana resmi ilk olarak ata
       } catch (err) {
         console.error('❌ Ürün getirilemedi:', err);
         notFound();
@@ -48,13 +54,43 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   if (!product)
     return <div className="p-10 text-center text-gray-500">Ürün yükleniyor...</div>;
 
+  // Modal açma fonksiyonu
+  const openModal = (src: string) => {
+    setModalSrc(src);
+    setModalOpen(true);
+  };
+
+  // Modal kapama fonksiyonu
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalSrc('');
+  };
+
   return (
     <div className="bg-white min-h-screen">
       <main className="p-4 md:p-10 max-w-5xl mx-auto bg-white rounded-xl shadow-lg">
         <div className="flex flex-col md:flex-row gap-10">
-          {/* Burada ProductGallery kullanıyoruz */}
+          {/* Ana büyük resim */}
           <div className="flex-1">
-            <ProductGallery images={product.imageUrls} />
+            <img
+              src={mainImage}
+              alt={product.name}
+              className="cursor-pointer rounded border"
+              onClick={() => openModal(mainImage)} // Modal açma
+            />
+
+            {/* Küçük resimler */}
+            <div className="flex gap-2 mt-4">
+              {product.imageUrls.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`${product.name} ${i + 1}`}
+                  className="w-16 h-16 cursor-pointer object-cover rounded border"
+                  onClick={() => setMainImage(img)} // Ana resmi değiştir
+                />
+              ))}
+            </div>
           </div>
 
           {/* Ürün Bilgileri */}
@@ -145,6 +181,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </main>
+
+      {/* Modal varsa göster */}
+      {modalOpen && <ImageModal imageUrl={modalSrc} onClose={closeModal} />}
     </div>
   );
 }
