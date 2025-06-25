@@ -1,4 +1,3 @@
-// frontend-app/app/checkout/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -50,6 +49,10 @@ export default function CheckoutPage() {
           customerName: nameSurname,
           address: `${neighborhood}, ${district}, ${city}`,
           phone,
+          cardName,
+          cardNumber,
+          expiryDate,
+          cvc,
         }),
       });
 
@@ -63,6 +66,31 @@ export default function CheckoutPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Kart numarası inputunda sadece rakam kabul et ve max 16 hane
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ''); // rakam olmayanları at
+    if (value.length > 16) value = value.slice(0, 16);
+    setCardNumber(value);
+  };
+
+  // Son kullanma tarihi için otomatik slash ekle (MM/YY)
+  const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/[^\d]/g, ''); // sadece rakam al
+    if (value.length > 4) value = value.slice(0, 4);
+
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    }
+    setExpiryDate(value);
+  };
+
+  // CVC alanı sadece 3 rakam olmalı
+  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 3) value = value.slice(0, 3);
+    setCvc(value);
   };
 
   return (
@@ -204,10 +232,11 @@ export default function CheckoutPage() {
             <input
               type="text"
               required
+              maxLength={16}
               value={cardNumber}
-              onChange={e => setCardNumber(e.target.value)}
+              onChange={handleCardNumberChange}
               className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
-              placeholder="**** **** **** ****"
+              placeholder="****************"
             />
           </div>
 
@@ -217,8 +246,9 @@ export default function CheckoutPage() {
               <input
                 type="text"
                 required
+                maxLength={5}
                 value={expiryDate}
-                onChange={e => setExpiryDate(e.target.value)}
+                onChange={handleExpiryDateChange}
                 className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
                 placeholder="AA/YY"
               />
@@ -228,8 +258,9 @@ export default function CheckoutPage() {
               <input
                 type="text"
                 required
+                maxLength={3}
                 value={cvc}
-                onChange={e => setCvc(e.target.value)}
+                onChange={handleCvcChange}
                 className="w-full border border-gray-300 rounded px-3 py-2 font-semibold text-gray-900"
                 placeholder="***"
               />

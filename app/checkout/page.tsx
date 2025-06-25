@@ -11,12 +11,6 @@ export default function CheckoutPage() {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
 
-  // Kart bilgileri için state'ler
-  const [cardName, setCardName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvc, setCvc] = useState('');
-
   // Giriş formu submit
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,31 +26,6 @@ export default function CheckoutPage() {
   // Üye olmadan devam
   const handleGuestContinue = () => {
     router.push('/payment');
-  };
-
-  // Kart numarası inputunda sadece rakam ve boşluk kabul et
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^\d\s]/g, '');
-    setCardNumber(value);
-  };
-
-  // CVC alanı sadece 3 rakam olmalı
-  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 3);
-    setCvc(value);
-  };
-
-  // Expiry date format: MM/YY, sadece rakam ve / kabul et
-  const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/[^\d\/]/g, '');
-
-    if (value.length === 2 && !value.includes('/')) {
-      value = value + '/';
-    }
-    if (value.length > 5) {
-      value = value.slice(0, 5);
-    }
-    setExpiryDate(value);
   };
 
   return (
@@ -102,7 +71,7 @@ export default function CheckoutPage() {
               placeholder="Şifrenizi giriniz"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded text-gray-900 relative"
+              className="w-full px-3 py-2 border border-gray-300 rounded text-gray-900"
             />
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center space-x-2">
@@ -125,47 +94,6 @@ export default function CheckoutPage() {
               GİRİŞ YAP
             </button>
 
-            {/* Kart bilgileri alanları */}
-            <div className="mt-6 space-y-4">
-              <input
-                type="text"
-                required
-                placeholder="Kart üzerindeki ad soyad"
-                value={cardName}
-                onChange={e => setCardName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded text-gray-900"
-              />
-              <input
-                type="text"
-                required
-                placeholder="Kart numarası (**** **** **** ****)"
-                maxLength={19}
-                value={cardNumber}
-                onChange={handleCardNumberChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded text-gray-900"
-              />
-              <div className="flex gap-4">
-                <input
-                  type="text"
-                  required
-                  placeholder="Son kullanma tarihi (MM/YY)"
-                  maxLength={5}
-                  value={expiryDate}
-                  onChange={handleExpiryDateChange}
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded text-gray-900"
-                />
-                <input
-                  type="text"
-                  required
-                  placeholder="CVC"
-                  maxLength={3}
-                  value={cvc}
-                  onChange={handleCvcChange}
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded text-gray-900"
-                />
-              </div>
-            </div>
-
             <button
               type="button"
               onClick={handleGoogleLogin}
@@ -184,6 +112,7 @@ export default function CheckoutPage() {
               </svg>
               Google ile bağlan
             </button>
+
             <button
               type="button"
               onClick={handleGuestContinue}
