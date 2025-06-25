@@ -38,9 +38,12 @@ export default function StorePage() {
         if (Array.isArray(data)) {
           const cleanData = data.map(item => ({
             ...item,
-            imageUrl: item.imageUrls && item.imageUrls.length > 0 ? item.imageUrls[0].trim() : '',
-            rating: item.rating ?? 4.5, // varsa gerçek rating yoksa 4.5
-            reviewCount: item.reviewCount ?? 11262, // varsa gerçek yorum yoksa örnek sayı
+            imageUrl:
+              item.imageUrls && item.imageUrls.length > 0
+                ? item.imageUrls[0].trim()
+                : '',
+            rating: item.rating ?? 4.5,
+            reviewCount: item.reviewCount ?? 11262,
           }));
           setProducts(cleanData);
         }
@@ -53,8 +56,15 @@ export default function StorePage() {
       ? products
       : products.filter(p => p.category === selectedCategory);
 
+  // Kesin imageUrl içeren objeyi sepete ekle
   const handleAddToCartAndRedirect = (product: Product) => {
-    addToCart(product);
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      imageUrl: product.imageUrl,
+    });
     router.push('/cart');
   };
 
