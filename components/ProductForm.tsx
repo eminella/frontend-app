@@ -1,3 +1,4 @@
+// frontend-app/components/ProductForm.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';

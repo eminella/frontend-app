@@ -1,18 +1,18 @@
-// frontend-app/app/product/[id]/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import classNames from 'classnames';
-import ImageModal from '@/components/ImageModal';
+
+import ProductGallery from '@/components/ProductGallery';
 
 type Product = {
   id: number;
   name: string;
   price: number;
   category: string;
-  imageUrls: string[]; // çoklu görsel desteği
+  imageUrls: string[];
 };
 
 const tabs = [
@@ -26,13 +26,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [showModal, setShowModal] = useState(false);
-  const [modalImage, setModalImage] = useState<string | null>(null);
   const { addToCart } = useCart();
   const router = useRouter();
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
-  // Ürünü getir
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -55,29 +52,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     <div className="bg-white min-h-screen">
       <main className="p-4 md:p-10 max-w-5xl mx-auto bg-white rounded-xl shadow-lg">
         <div className="flex flex-col md:flex-row gap-10">
-          {/* Ürün Görselleri */}
+          {/* Burada ProductGallery kullanıyoruz */}
           <div className="flex-1">
-            <div className="flex gap-4 overflow-x-auto">
-              {product.imageUrls.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`ürün-${index}`}
-                  onClick={() => {
-                    setModalImage(url);
-                    setShowModal(true);
-                  }}
-                  className="w-40 h-40 object-cover rounded-xl border cursor-pointer"
-                />
-              ))}
-            </div>
+            <ProductGallery images={product.imageUrls} />
           </div>
 
           {/* Ürün Bilgileri */}
           <div className="flex-1">
-            <h1 className="text-2xl font-bold mb-2 text-gray-900">
-              {product.name}
-            </h1>
+            <h1 className="text-2xl font-bold mb-2 text-gray-900">{product.name}</h1>
 
             <p className="text-sm text-gray-500 mb-2">
               Ürün Kodu: EM{product.id.toString().padStart(6, '0')}
@@ -162,15 +144,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             )}
           </div>
         </div>
-
-        {/* Modal */}
-        {showModal && modalImage && (
-          <ImageModal imageUrl={modalImage} onClose={() => setShowModal(false)} />
-        )}
       </main>
     </div>
   );
 }
-
-
-//.. HER ZERRESİNE DEĞİCEK KORKMUYORUM SADECE MERAK EDİYORUM NE ZAMAN DİYE VESSELAM...
