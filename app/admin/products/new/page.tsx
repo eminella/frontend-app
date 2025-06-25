@@ -1,9 +1,8 @@
-// frontend-app/app/admin/products/new/page.tsx
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import ImageUploader from '@/components/ImageUploader';
+import ImageUploader from '@/components/ImageUploader'; // varsa kendi dosyan
 
 export default function NewProductPage() {
   const router = useRouter();
