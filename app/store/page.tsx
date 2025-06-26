@@ -1,3 +1,4 @@
+// frontend-app/app/store/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
@@ -7,8 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
-
-import StarRating from '@/components/StarRating'; // Yıldız bileşeni
+import StarRating from '@/components/StarRating';
 
 type Product = {
   id: number;
@@ -56,7 +56,6 @@ export default function StorePage() {
       ? products
       : products.filter(p => p.category === selectedCategory);
 
-  // Kesin imageUrl içeren objeyi sepete ekle
   const handleAddToCartAndRedirect = (product: Product) => {
     addToCart({
       id: product.id,
@@ -69,17 +68,17 @@ export default function StorePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-2">
+    <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-6 w-full">
       {/* Kategori Menüsü */}
-      <div className="bg-gray-100 py-3 px-4 rounded-xl shadow-sm mb-10 max-w-5xl mx-auto overflow-x-auto">
+      <div className="bg-gray-100 py-3 px-6 rounded-xl shadow-sm mb-10 max-w-7xl mx-auto overflow-x-auto">
         <div className="flex gap-6 justify-center flex-wrap text-sm font-semibold text-gray-700">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`transition px-2 pb-1 border-b-2 ${
+              className={`transition px-3 pb-2 border-b-4 rounded-t-lg ${
                 selectedCategory === cat
-                  ? 'border-red-600 text-red-600'
+                  ? 'border-red-600 text-red-600 font-bold'
                   : 'border-transparent hover:border-gray-400 hover:text-black'
               }`}
             >
@@ -90,45 +89,42 @@ export default function StorePage() {
       </div>
 
       {/* Ürün Kartları */}
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
+      <div className="w-full px-6 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl">
         {filteredProducts.map(product => (
           <div
             key={product.id}
-            className="border rounded-2xl shadow p-4 flex flex-col h-full relative"
+            className="bg-white border border-gray-300 rounded-3xl shadow-lg p-6 flex flex-col h-full"
           >
-            {/* Detay sayfasına link */}
-            <Link href={`/store/${product.id}`} className="block relative h-48 w-full mb-4">
+            <Link
+              href={`/store/${product.id}`}
+              className="relative h-52 w-full mb-6 block rounded-2xl overflow-hidden shadow-inner"
+            >
               {product.imageUrl ? (
                 <Image
                   src={product.imageUrl}
                   alt={product.name}
                   fill
-                  className="object-contain rounded-xl"
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 25vw"
                 />
               ) : (
-                <div className="bg-gray-100 h-full flex items-center justify-center rounded-xl">
+                <div className="bg-gray-100 h-full flex items-center justify-center rounded-2xl">
                   <span className="text-gray-400">Resim yok</span>
                 </div>
               )}
             </Link>
 
-            <h3 className="text-lg font-semibold mb-1 text-black opacity-100">{product.name}</h3>
-
-            {/* Yıldız ve yorum */}
-            <div className="flex items-center gap-2 mb-2">
+            <h3 className="text-xl font-semibold text-black mb-2">{product.name}</h3>
+            <div className="flex items-center gap-2 mb-3">
               <StarRating rating={product.rating ?? 0} />
               <span className="text-sm text-gray-500">({product.reviewCount ?? 0})</span>
             </div>
-
-            <p className="text-xl font-bold text-green-600 mb-4 text-black opacity-100">
+            <p className="text-2xl font-extrabold text-green-700 mb-6">
               {product.price.toFixed(2)} ₺
             </p>
-
             <button
               onClick={() => handleAddToCartAndRedirect(product)}
-              className="mt-auto flex items-center justify-center gap-2 rounded-2xl py-2 px-4
-                         bg-white text-red-600 border border-red-600
-                         hover:bg-red-600 hover:text-white hover:shadow-md transition"
+              className="mt-auto bg-red-600 text-white rounded-2xl py-3 font-bold hover:bg-red-700 transition-shadow shadow-md"
             >
               Sepete Ekle
             </button>
