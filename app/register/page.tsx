@@ -1,16 +1,37 @@
+// frontend-app/app/register/page.tsx
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Kayıt işlemi için API çağrısı burada yapılacak
-    alert('Kayıt işlemi yapıldı (örnek)');
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Kayıt başarılı!');
+        router.push('/login');
+      } else {
+        alert(data.error || 'Kayıt başarısız');
+      }
+    } catch (err) {
+      console.error('Kayıt hatası:', err);
+      alert('Sunucu hatası');
+    }
   };
 
   return (
