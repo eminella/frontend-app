@@ -1,4 +1,3 @@
-// frontend-app/app/account/uye-girisi-sayfasi/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -26,7 +25,8 @@ export default function UyeGirisiSayfasi() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    router.push('/login');
+    // Sayfayı tam yenile, böylece header da güncellenir
+    window.location.href = '/login';
   };
 
   return (
