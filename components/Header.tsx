@@ -3,12 +3,19 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { User, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 export default function Header() {
   const { cartItems } = useCart();
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   return (
     <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
@@ -17,15 +24,25 @@ export default function Header() {
       </Link>
 
       <div className="flex items-center space-x-4 text-sm">
-        <Link href="/login" className="flex items-center space-x-1 hover:opacity-90">
-          <User className="w-5 h-5" />
-          <span>Giriş Yap</span>
-        </Link>
-        <span className="opacity-50">|</span>
-        <Link href="/register" className="flex items-center space-x-1 hover:opacity-90">
-          <User className="w-5 h-5" />
-          <span>Kayıt Ol</span>
-        </Link>
+        {isLoggedIn ? (
+          <Link href="/account" className="flex items-center space-x-1 hover:opacity-90">
+            <User className="w-5 h-5" />
+            <span>Hesabım</span>
+          </Link>
+        ) : (
+          <>
+            <Link href="/login" className="flex items-center space-x-1 hover:opacity-90">
+              <User className="w-5 h-5" />
+              <span>Giriş Yap</span>
+            </Link>
+            <span className="opacity-50">|</span>
+            <Link href="/register" className="flex items-center space-x-1 hover:opacity-90">
+              <User className="w-5 h-5" />
+              <span>Kayıt Ol</span>
+            </Link>
+          </>
+        )}
+
         <span className="opacity-50">|</span>
         <button
           onClick={() => router.push('/cart')}
