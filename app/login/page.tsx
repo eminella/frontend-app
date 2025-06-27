@@ -1,3 +1,4 @@
+// frontend-app/app/login/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -14,7 +15,7 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -28,9 +29,9 @@ export default function LoginPage() {
       }
 
       localStorage.setItem('token', data.token);
-      router.push('/store'); // Giriş sonrası mağaza sayfası
+      router.push('/store');
 
-    } catch {
+    } catch (err) {
       setError('Sunucuya bağlanılamadı');
     }
   };
