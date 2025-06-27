@@ -82,12 +82,12 @@ export default function UyeGirisiSayfasi() {
               </button>
             </li>
             <li>
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
-              >
-                Çıkış Yap
-              </button>
+            <button
+  onClick={handleLogout}
+  className="mt-6 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+>
+  Çıkış Yap
+</button>
             </li>
           </ul>
         </nav>

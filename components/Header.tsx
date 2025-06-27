@@ -27,13 +27,6 @@ export default function Header() {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    router.push('/login');
-  };
-
   return (
     <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
       <Link href="/">
@@ -42,18 +35,10 @@ export default function Header() {
 
       <div className="flex items-center space-x-4 text-sm">
         {isLoggedIn ? (
-          <>
-            <Link href="/account/uye-girisi-sayfasi" className="flex items-center space-x-1 hover:opacity-90">
-              <User className="w-5 h-5" />
-              <span>Hesabım</span>
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="ml-4 px-3 py-1 bg-red-600 rounded hover:bg-red-700"
-            >
-              Çıkış Yap
-            </button>
-          </>
+          <Link href="/account/uye-girisi-sayfasi" className="flex items-center space-x-1 hover:opacity-90">
+            <User className="w-5 h-5" />
+            <span>Hesabım</span>
+          </Link>
         ) : (
           <>
             <Link href="/login" className="flex items-center space-x-1 hover:opacity-90">
