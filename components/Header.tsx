@@ -1,8 +1,7 @@
-// frontend-app/components/Header.tsx
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { User, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -10,6 +9,7 @@ import { useCart } from '@/context/CartContext';
 export default function Header() {
   const { cartItems } = useCart();
   const router = useRouter();
+  const pathname = usePathname();  // Burada pathname alıyoruz
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function Header() {
     return () => {
       window.removeEventListener('storage', syncLoginStatus);
     };
-  }, []);
+  }, [pathname]); // Burada pathname kullanıyoruz
 
   return (
     <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
