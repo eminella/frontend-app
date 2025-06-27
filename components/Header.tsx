@@ -1,4 +1,3 @@
-// frontend-app/components/Header.tsx
 'use client';
 
 import Link from 'next/link';
@@ -10,7 +9,7 @@ import { useCart } from '@/context/CartContext';
 export default function Header() {
   const { cartItems } = useCart();
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname();  // Şu anki yol
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -26,13 +25,16 @@ export default function Header() {
     return () => {
       window.removeEventListener('storage', syncLoginStatus);
     };
-  }, [pathname]);
+  }, [pathname]); // Her sayfa değişiminde kontrol et
+
+  // Eğer admin panelindeysek header göstermiyoruz
+  if (pathname.startsWith('/admin')) return null;
 
   return (
     <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
-      {/* <Link href="/">
-        <h1 className="text-2xl font-bold">Eminella</h1>
-      </Link> */}
+      <Link href="/">
+        <h1 className="text-2xl font-bold cursor-pointer">Eminella</h1>
+      </Link>
 
       <div className="flex items-center space-x-4 text-sm">
         {isLoggedIn ? (
