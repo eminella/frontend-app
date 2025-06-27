@@ -28,7 +28,11 @@ export default function LoginPage() {
         return;
       }
 
+      // ✅ Giriş başarılıysa bilgileri kaydet
       localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // ✅ Store sayfasına yönlendir
       router.push('/store');
 
     } catch (err) {
