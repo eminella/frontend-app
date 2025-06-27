@@ -13,19 +13,18 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // İlk kontrol
     setIsLoggedIn(!!localStorage.getItem('token'));
 
-    // storage event listener - farklı sekmelerde logout/login için
-    function syncLoginStatus(e: StorageEvent) {
+    const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'token') {
         setIsLoggedIn(!!e.newValue);
       }
-    }
-    window.addEventListener('storage', syncLoginStatus);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
 
     return () => {
-      window.removeEventListener('storage', syncLoginStatus);
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
