@@ -1,73 +1,58 @@
-// frontend-app/components/Header.tsx
+// frontend-app/app/account/
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { User, ShoppingCart } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
 
-export default function Header() {
-  const { cartItems } = useCart();
+export default function AccountPage() {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
 
   useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem('token'));
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
 
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'token') {
-        setIsLoggedIn(!!e.newValue);
-      }
-    };
+    if (!token || !userData) {
+      router.push('/login');
+      return;
+    }
 
-    window.addEventListener('storage', handleStorageChange);
+    setUser(JSON.parse(userData));
+  }, [router]);
 
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
+  if (!user) return <p className="p-8 text-center">Yükleniyor...</p>;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
 
   return (
-    <header className="p-4 bg-yellow-800 text-white flex justify-between items-center">
-      <Link href="/">
-        <h1 className="text-2xl font-bold">Eminella</h1>
-      </Link>
+    <main className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+      <div className="max-w-3xl mx-auto py-10 px-6 bg-white rounded shadow space-y-6">
+        <h1 className="text-3xl font-bold mb-6">👤 Hesap Bilgileri</h1>
 
-      <div className="flex items-center space-x-4 text-sm">
-        {isLoggedIn ? (
-          <Link href="/account/uye-girisi-sayfasi" className="flex items-center space-x-1 hover:opacity-90">
-            <User className="w-5 h-5" />
-            <span>Hesabım</span>
-          </Link>
-        ) : (
-          <>
-            <Link href="/login" className="flex items-center space-x-1 hover:opacity-90">
-              <User className="w-5 h-5" />
-              <span>Giriş Yap</span>
-            </Link>
-            <span className="opacity-50">|</span>
-            <Link href="/register" className="flex items-center space-x-1 hover:opacity-90">
-              <User className="w-5 h-5" />
-              <span>Kayıt Ol</span>
-            </Link>
-          </>
-        )}
+        <div>
+          <strong>Ad Soyad:</strong> <span>{user.name}</span>
+        </div>
+        <div>
+          <strong>E-posta:</strong> <span>{user.email}</span>
+        </div>
+        <div>
+          <strong>Şifre Değiştir</strong> (henüz aktif değil)
+        </div>
+        <div>
+          <strong>Siparişlerim</strong> (henüz aktif değil)
+        </div>
 
-        <span className="opacity-50">|</span>
         <button
-          onClick={() => router.push('/cart')}
-          className="relative flex items-center space-x-1 hover:opacity-90"
+          onClick={handleLogout}
+          className="mt-6 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
-          <ShoppingCart className="w-5 h-5" />
-          <span>Sepet</span>
-          {cartItems.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-              {cartItems.length}
-            </span>
-          )}
+          Çıkış Yap
         </button>
       </div>
-    </header>
+    </main>
   );
 }
