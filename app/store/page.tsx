@@ -11,8 +11,10 @@ import { useRouter } from 'next/navigation';
 import StarRating from '@/components/StarRating';
 import BannerSlider from '@/components/BannerSlider';
 import PopularCategories from '@/components/PopularCategories';
-import ProductSlider from '@/components/ProductSlider'; // ⭐ Kampanya slider
+import ProductSlider from '@/components/ProductSlider';
+import BestSellersSlider from '@/components/BestSellersSlider';
 
+// ✅ Ürün tipi
 type Product = {
   id: number;
   name: string;
@@ -80,6 +82,12 @@ export default function StorePage() {
         <div className="max-w-7xl mx-auto my-10">
           <h2 className="text-2xl font-bold mb-4 text-center text-red-700">Kampanyalı Ürünler</h2>
           <ProductSlider />
+        </div>
+
+        {/* 💥 Çok Satanlar */}
+        <div className="max-w-7xl mx-auto my-10">
+          <h2 className="text-2xl font-bold mb-4 text-center text-red-700">Çok Satanlar</h2>
+          <BestSellersSlider />
         </div>
 
         {/* 🧭 Kategori Menüsü */}
