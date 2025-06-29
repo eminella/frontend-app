@@ -44,32 +44,43 @@ export default function StorePage() {
   }, [BASE_URL]);
 
   return (
-    <main className="min-h-screen bg-white py-10 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {products.map(product => (
-        <div key={product.id} className="border rounded-xl shadow p-4 flex flex-col items-center">
-          <img
-            src={product.imageUrl || '/placeholder.jpg'}
-            alt={product.name}
-            className="w-full h-48 object-cover rounded-lg mb-2"
-          />
-          <h3 className="text-lg font-semibold text-center mb-1">{product.name}</h3>
-          <p className="text-red-600 font-bold text-md mb-2">{product.price.toFixed(2)} TL</p>
-          <button
-            onClick={() =>
-              addToCart({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                imageUrl: product.imageUrl,
-                category: product.category,
-              })
-            }
-            className="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full text-sm"
-          >
-            Sepete Ekle
-          </button>
+    <main className="bg-white py-6 px-4">
+      <h2 className="text-xl font-bold mb-4 text-gray-800">Tüm Ürünler</h2>
+
+      <div className="overflow-x-auto scroll-smooth hide-scrollbar">
+        <div className="flex gap-4 min-w-max">
+          {products.map(product => (
+            <div
+              key={product.id}
+              className="min-w-[220px] max-w-[220px] bg-white border rounded-xl shadow p-4 flex-shrink-0"
+            >
+              <img
+                src={product.imageUrl || '/placeholder.jpg'}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded-lg mb-2"
+              />
+              <h3 className="text-md font-semibold mb-1">{product.name}</h3>
+              <p className="text-red-600 font-bold text-sm mb-2">
+                {product.price.toFixed(2)} TL
+              </p>
+              <button
+                onClick={() =>
+                  addToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    imageUrl: product.imageUrl,
+                    category: product.category,
+                  })
+                }
+                className="w-full bg-red-600 hover:bg-red-700 text-white text-sm py-1 rounded-full"
+              >
+                Sepete Ekle
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </main>
   );
 }
