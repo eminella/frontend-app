@@ -1,48 +1,49 @@
-// frontend-app/components/BannerSlider.tsx
 'use client';
 
-import { useKeenSlider } from 'keen-slider/react';
-import 'keen-slider/keen-slider.min.css';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-const banners = [
-  {
-    image: '/banner1.png',
-    title: 'Karne Hediyeleriniz',
-    subtitle: 'TRT Market’te',
-    discount: '%15 İNDİRİM!',
-  },
-  {
-    image: '/banner2.png',
-    title: 'Yaz Koleksiyonu',
-    subtitle: 'Eminella’da',
-    discount: '%20 İNDİRİM!',
-  },
-];
+interface Banner {
+  id: number;
+  title?: string;
+  imageUrl: string;
+}
 
 export default function BannerSlider() {
-  const [sliderRef] = useKeenSlider<HTMLDivElement>({
-    loop: true,
-    mode: 'snap',
-    slides: { perView: 1 },
-  });
+  const [banners, setBanners] = useState<Banner[]>([]);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/banners`)
+      .then((res) => res.json())
+      .then((data) => setBanners(data));
+  }, []);
+
+  if (banners.length === 0) return null;
 
   return (
-    <div ref={sliderRef} className="keen-slider rounded-xl overflow-hidden shadow mb-8">
-      {banners.map((banner, index) => (
-        <div
-          key={index}
-          className="keen-slider__slide flex flex-col md:flex-row items-center justify-between bg-white p-6 md:p-12"
-        >
-          <div className="max-w-lg">
-            <h2 className="text-3xl md:text-4xl font-bold mb-2">{banner.title}</h2>
-            <h3 className="text-2xl text-red-600 font-bold mb-4">{banner.subtitle}</h3>
-            <p className="bg-red-600 text-white inline-block px-4 py-2 rounded font-semibold">
-              {banner.discount}
-            </p>
+    <div className="w-full overflow-hidden rounded-xl mb-10">
+      <div className="flex gap-4 overflow-x-auto hide-scrollbar">
+        {banners.map((banner) => (
+          <div
+            key={banner.id}
+            className="min-w-full relative h-[220px] bg-white flex items-center justify-between px-10"
+          >
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl md:text-4xl font-bold text-black">{banner.title || 'Eminella Fırsatları'}</h2>
+              <p className="text-red-600 font-bold text-lg">TRT Market’te</p>
+              <button className="bg-red-600 text-white px-4 py-2 rounded">%15 İNDİRİM!</button>
+            </div>
+            <Image
+              src={banner.imageUrl}
+              alt={banner.title || 'Banner'}
+              width={400}
+              height={200}
+              className="h-[180px] w-auto object-contain"
+            />
           </div>
-          <img src={banner.image} alt={banner.title} className="w-60 md:w-96 object-contain" />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
