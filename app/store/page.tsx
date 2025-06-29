@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import StarRating from '@/components/StarRating';
 import BannerSlider from '@/components/BannerSlider';
 import PopularCategories from '@/components/PopularCategories';
+import ProductSlider from '@/components/ProductSlider'; // ⭐ Kampanya slider
 
 type Product = {
   id: number;
@@ -75,7 +76,13 @@ export default function StorePage() {
         {/* ⭐ Banner slider */}
         <BannerSlider />
 
-        {/* Kategori Menüsü */}
+        {/* 🔥 Kampanya Ürünleri */}
+        <div className="max-w-7xl mx-auto my-10">
+          <h2 className="text-2xl font-bold mb-4 text-center text-red-700">Kampanyalı Ürünler</h2>
+          <ProductSlider />
+        </div>
+
+        {/* 🧭 Kategori Menüsü */}
         <div className="bg-gray-100 py-3 px-6 rounded-xl shadow-sm mb-10 max-w-7xl mx-auto overflow-x-auto">
           <div className="flex gap-6 justify-center flex-wrap text-sm font-semibold text-gray-700">
             {categories.map(cat => (
@@ -94,7 +101,7 @@ export default function StorePage() {
           </div>
         </div>
 
-        {/* Ürün Kartları */}
+        {/* 🛒 Ürün Kartları */}
         <div className="w-full px-6 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl">
           {filteredProducts.map(product => (
             <div
