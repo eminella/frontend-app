@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import StarRating from '@/components/StarRating';
+import BannerSlider from '@/components/BannerSlider'; // ⭐ Banner eklendi
 
 type Product = {
   id: number;
@@ -69,6 +70,9 @@ export default function StorePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-6 w-full">
+      {/* ⭐ Banner slider */}
+      <BannerSlider />
+
       {/* Kategori Menüsü */}
       <div className="bg-gray-100 py-3 px-6 rounded-xl shadow-sm mb-10 max-w-7xl mx-auto overflow-x-auto">
         <div className="flex gap-6 justify-center flex-wrap text-sm font-semibold text-gray-700">

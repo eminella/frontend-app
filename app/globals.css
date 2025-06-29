@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
 @import "react-quill/dist/quill.snow.css";
 @import "tailwindcss";
+@import 'keen-slider/keen-slider.min.css';
 
 /* Global sabit renkler */
 :root {
