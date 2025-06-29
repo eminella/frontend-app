@@ -1,3 +1,4 @@
+// frontend-app/app/admin/login/page.tsx
 'use client';
 
 export const dynamic = 'force-dynamic';
@@ -18,16 +19,26 @@ export default function AdminLoginPage() {
       return;
     }
 
-    const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-    if (res.ok) {
-      router.push('/admin');
-    } else {
-      alert('Giriş başarısız');
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem('token', data.token); // JWT token kaydet
+        router.push('/admin');
+      } else {
+        alert('Giriş başarısız');
+      }
+    } catch (err) {
+      console.error('Giriş hatası:', err);
+      alert('Sunucuya bağlanılamadı.');
     }
   };
 
