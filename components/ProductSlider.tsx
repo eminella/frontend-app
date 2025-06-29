@@ -1,107 +1,123 @@
 // frontend-app/components/ProductSlider.tsx
 'use client';
 
-import { useKeenSlider } from 'keen-slider/react';
-import 'keen-slider/keen-slider.min.css';
-import { ArrowRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { useCart } from '@/context/CartContext';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const campaignProducts = [
-  {
-    id: 1,
-    name: 'Akıllı Tavşan Momo - Kalemlik',
-    imageUrl: '/campaign/momo.png',
-    oldPrice: 189.9,
-    price: 161.42,
-    discountText: '%15 İNDİRİM',
-  },
-  {
-    id: 2,
-    name: 'TRT Logolu Metal Anahtarlık',
-    imageUrl: '/campaign/anahtarlik.png',
-    oldPrice: 137.9,
-    price: 117.22,
-    discountText: '%15 İNDİRİM',
-  },
-  {
-    id: 3,
-    name: 'Sürpriz Kutusu Mini Tasarım',
-    imageUrl: '/campaign/surpriz.png',
-    oldPrice: 266.9,
-    price: 226.87,
-    discountText: '%15 İNDİRİM',
-  },
-  {
-    id: 4,
-    name: 'Z Takımı - Hazine Avı Kutu Oyunu',
-    imageUrl: '/campaign/hazine.png',
-    oldPrice: 435.9,
-    price: 370.52,
-    discountText: '%15 İNDİRİM',
-  },
-];
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl?: string;
+  category: string;
+  originalPrice?: number;
+}
 
 export default function ProductSlider() {
-  const [sliderRef] = useKeenSlider<HTMLDivElement>({
-    loop: false,
-    mode: 'free-snap',
-    slides: { perView: 2.2, spacing: 16 },
-    breakpoints: {
-      '(min-width: 640px)': {
-        slides: { perView: 3, spacing: 24 },
-      },
-      '(min-width: 1024px)': {
-        slides: { perView: 4, spacing: 32 },
-      },
-    },
-  });
+  const [products, setProducts] = useState<Product[]>([]);
+  const { addToCart } = useCart();
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/products`)
+      .then(res => res.json())
+      .then(data => {
+        const filtered = data.filter((p: any) => p.price && p.originalPrice && p.price < p.originalPrice);
+        const sorted = filtered.slice(0, 10);
+        setProducts(sorted);
+      });
+  }, []);
+
+  const scroll = (direction: 'left' | 'right') => {
+    const container = sliderRef.current;
+    if (!container) return;
+    const scrollAmount = container.offsetWidth / 1.5;
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
 
   return (
-    <section className="py-16 bg-white">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Kampanyalı Ürünler</h2>
-      <div ref={sliderRef} className="keen-slider px-4">
-        {campaignProducts.map((product) => (
-          <div
-            key={product.id}
-            className="keen-slider__slide bg-white border rounded-2xl p-4 shadow-sm flex flex-col items-center relative"
-          >
-            {/* İndirim Rozeti */}
-            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full z-10">
-              {product.discountText}
-            </div>
+    <div className="relative">
+      {/* Oklar */}
+      <button
+        onClick={() => scroll('left')}
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full z-10 p-2 hover:bg-gray-100"
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <button
+        onClick={() => scroll('right')}
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full z-10 p-2 hover:bg-gray-100"
+      >
+        <ChevronRight size={24} />
+      </button>
 
-            {/* Ürün Görseli */}
-            <div className="w-full h-40 relative mb-4">
+      {/* Ürünler */}
+      <div
+        ref={sliderRef}
+        className="flex gap-4 overflow-x-auto pb-2 px-6 scroll-smooth hide-scrollbar"
+      >
+        {products.map((product) => {
+          const hasDiscount =
+            typeof product.originalPrice === 'number' &&
+            product.originalPrice > product.price;
+
+          const discountRate = hasDiscount
+            ? Math.round(100 - (product.price * 100) / product.originalPrice!)
+            : 0;
+
+          return (
+            <div
+              key={product.id}
+              className="min-w-[240px] max-w-[240px] bg-white rounded-xl shadow border p-4 flex-shrink-0 relative"
+            >
+              {/* % İNDİRİM etiketi */}
+              {hasDiscount && (
+                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                  %{discountRate} İNDİRİM
+                </div>
+              )}
+
               <Image
-                src={product.imageUrl}
+                src={product.imageUrl || '/placeholder.jpg'}
                 alt={product.name}
-                fill
-                className="object-contain"
+                width={300}
+                height={300}
+                className="rounded-xl w-full h-40 object-cover mb-2"
               />
-            </div>
-
-            {/* Ürün Adı */}
-            <p className="text-center text-sm font-medium text-gray-800 mb-2 min-h-[40px]">
-              {product.name}
-            </p>
-
-            {/* Fiyat */}
-            <div className="text-center mb-4">
-              <span className="text-sm text-gray-400 line-through mr-2">
-                {product.oldPrice.toFixed(2)} TL
-              </span>
-              <span className="text-lg font-bold text-red-600">
+              <h3 className="text-md font-semibold mb-1">{product.name}</h3>
+              {hasDiscount && (
+                <p className="text-sm text-gray-400 line-through">
+                  {product.originalPrice?.toFixed(2)} TL
+                </p>
+              )}
+              <p className="text-red-600 font-bold text-lg mb-2">
                 {product.price.toFixed(2)} TL
-              </span>
+              </p>
+              <button
+                onClick={() =>
+                  addToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    imageUrl: product.imageUrl,
+                    category: product.category,
+                  })
+                }
+                className="w-full border text-sm font-semibold rounded-full py-2 hover:bg-gray-100 transition flex items-center justify-center gap-1"
+              >
+                Sepete Ekle →
+              </button>
             </div>
-
-            {/* Buton */}
-            <button className="flex items-center justify-center gap-1 text-sm px-4 py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition">
-              Sepete Ekle <ArrowRight size={16} />
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
-    </section>
+    </div>
   );
 }
