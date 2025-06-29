@@ -1,3 +1,4 @@
+// frontend-app/components/AdminSidebar.tsx
 'use client';
 
 import Link from 'next/link';
@@ -43,6 +44,25 @@ export default function AdminSidebar() {
         >
           Siparişler
         </Link>
+      </div>
+
+      {/* Mağaza Tasarımı (Drop menü) */}
+      <div className="mt-4">
+        <button
+          onClick={() => toggleMenu('design')}
+          className="w-full text-left font-semibold py-2 hover:bg-slate-800 transition rounded"
+        >
+          Mağaza Tasarımı
+        </button>
+
+        {openMenu === 'design' && (
+          <div className="ml-4 mt-1 space-y-1 text-sm">
+            <Link href="/admin/banner" className="block hover:text-yellow-400">
+              • Banner Yükle
+            </Link>
+            {/* İleride başka şeyler de eklersen buraya ekle */}
+          </div>
+        )}
       </div>
     </aside>
   );
