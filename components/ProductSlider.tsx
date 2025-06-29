@@ -44,21 +44,21 @@ export default function ProductSlider() {
 
   return (
     <div className="relative">
-      {/* Oklar */}
+      {/* ✅ KOYU ARKAPLANLI OKLAR */}
       <button
         onClick={() => scroll('left')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full z-10 p-2 hover:bg-gray-100"
+        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white shadow-lg rounded-full z-20 p-2 hover:bg-gray-800"
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={20} />
       </button>
       <button
         onClick={() => scroll('right')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full z-10 p-2 hover:bg-gray-100"
+        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white shadow-lg rounded-full z-20 p-2 hover:bg-gray-800"
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={20} />
       </button>
 
-      {/* Ürünler */}
+      {/* Slider ürünleri */}
       <div
         ref={sliderRef}
         className="flex gap-4 overflow-x-auto pb-2 px-6 scroll-smooth hide-scrollbar"
