@@ -1,73 +1,71 @@
-// frontend-app/components/ProductSlider.tsx
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { useCart } from '@/context/CartContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
 
 interface Product {
   id: number;
   name: string;
   price: number;
-  imageUrl?: string;
-  category: string;
   originalPrice?: number;
+  category: string;
+  imageUrls: string[];
+  imageUrl?: string;
 }
 
 export default function ProductSlider() {
   const [products, setProducts] = useState<Product[]>([]);
-  const { addToCart } = useCart();
   const sliderRef = useRef<HTMLDivElement>(null);
-
+  const { addToCart } = useCart();
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
 
   useEffect(() => {
     fetch(`${BASE_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
-        const filtered = data.filter((p: any) => p.price && p.originalPrice && p.price < p.originalPrice);
-        const sorted = filtered.slice(0, 10);
-        setProducts(sorted);
+        const filtered = data
+          .filter((item: Product) => item.imageUrls && item.imageUrls.length > 0)
+          .slice(0, 15);
+        setProducts(filtered);
       });
   }, []);
 
   const scroll = (direction: 'left' | 'right') => {
-    const container = sliderRef.current;
-    if (!container) return;
-    const scrollAmount = container.offsetWidth / 1.5;
-    container.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
+    if (sliderRef.current) {
+      const scrollAmount = sliderRef.current.offsetWidth * 0.8;
+      sliderRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
     <div className="relative">
-      {/* ✅ KOYU ARKAPLANLI OKLAR */}
+      {/* Kaydırma Okları */}
       <button
         onClick={() => scroll('left')}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black text-white shadow-lg rounded-full z-20 p-2 hover:bg-gray-800"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow hover:bg-gray-100"
       >
-        <ChevronLeft size={20} />
+        <ChevronLeft className="text-gray-700" />
       </button>
       <button
         onClick={() => scroll('right')}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black text-white shadow-lg rounded-full z-20 p-2 hover:bg-gray-800"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow hover:bg-gray-100"
       >
-        <ChevronRight size={20} />
+        <ChevronRight className="text-gray-700" />
       </button>
 
-      {/* Slider ürünleri */}
+      {/* Slider */}
       <div
         ref={sliderRef}
-        className="flex gap-4 overflow-x-auto pb-2 px-6 scroll-smooth hide-scrollbar"
+        className="flex gap-4 overflow-x-auto scroll-smooth px-8 py-4 hide-scrollbar"
       >
         {products.map((product) => {
-          const hasDiscount =
-            typeof product.originalPrice === 'number' &&
-            product.originalPrice > product.price;
-
+          const image = product.imageUrls[0]?.trim() || '/placeholder.jpg';
+          const hasDiscount = product.originalPrice && product.originalPrice > product.price;
           const discountRate = hasDiscount
             ? Math.round(100 - (product.price * 100) / product.originalPrice!)
             : 0;
@@ -75,42 +73,39 @@ export default function ProductSlider() {
           return (
             <div
               key={product.id}
-              className="min-w-[240px] max-w-[240px] bg-white rounded-xl shadow border p-4 flex-shrink-0 relative"
+              className="min-w-[220px] max-w-[220px] bg-white border rounded-2xl shadow-sm p-3 flex-shrink-0 relative"
             >
-              {/* % İNDİRİM etiketi */}
+              {/* % İndirim etiketi */}
               {hasDiscount && (
                 <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
-                  %{discountRate} İNDİRİM
+                  %{discountRate} İndirim
                 </div>
               )}
-
               <Image
-                src={product.imageUrl || '/placeholder.jpg'}
+                src={image}
                 alt={product.name}
-                width={300}
-                height={300}
-                className="rounded-xl w-full h-40 object-cover mb-2"
+                width={200}
+                height={200}
+                className="w-full h-36 object-cover rounded mb-2"
               />
-              <h3 className="text-md font-semibold mb-1">{product.name}</h3>
+              <h3 className="text-sm font-semibold line-clamp-2">{product.name}</h3>
               {hasDiscount && (
-                <p className="text-sm text-gray-400 line-through">
+                <p className="text-xs text-gray-400 line-through mt-1">
                   {product.originalPrice?.toFixed(2)} TL
                 </p>
               )}
-              <p className="text-red-600 font-bold text-lg mb-2">
-                {product.price.toFixed(2)} TL
-              </p>
+              <p className="text-red-600 font-bold text-md">{product.price.toFixed(2)} TL</p>
               <button
                 onClick={() =>
                   addToCart({
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    imageUrl: product.imageUrl,
+                    imageUrl: image,
                     category: product.category,
                   })
                 }
-                className="w-full border text-sm font-semibold rounded-full py-2 hover:bg-gray-100 transition flex items-center justify-center gap-1"
+                className="w-full mt-2 bg-red-600 hover:bg-red-700 text-white text-sm py-1 rounded-full flex items-center justify-center gap-1"
               >
                 Sepete Ekle →
               </button>
