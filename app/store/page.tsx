@@ -5,14 +5,8 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
-import { useRouter } from 'next/navigation';
-import BannerSlider from '@/components/BannerSlider';
-import PopularCategories from '@/components/PopularCategories';
-import ProductSlider from '@/components/ProductSlider';
-import BestSellersSlider from '@/components/BestSellersSlider';
 
-// Ürün tipi
-type Product = {
+interface Product {
   id: number;
   name: string;
   price: number;
@@ -21,18 +15,13 @@ type Product = {
   imageUrl?: string;
   rating?: number;
   reviewCount?: number;
-};
-
-// Kategori listesi
-const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
+}
 
 export default function StorePage() {
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3600';
   const { addToCart } = useCart();
-  const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
 
   useEffect(() => {
     fetch(`${BASE_URL}/api/products`)
@@ -55,45 +44,32 @@ export default function StorePage() {
   }, [BASE_URL]);
 
   return (
-    <>
-      <main className="min-h-screen bg-white py-4 px-4 w-full">
-        {/* Banner */}
-        <BannerSlider />
-
-        {/* Kampanyalı Ürünler */}
-        <div className="max-w-7xl mx-auto my-8">
-          <h2 className="text-xl font-bold mb-4 text-center text-gray-800">Kampanyalı Ürünler</h2>
-          <ProductSlider />
+    <main className="min-h-screen bg-white py-10 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {products.map(product => (
+        <div key={product.id} className="border rounded-xl shadow p-4 flex flex-col items-center">
+          <img
+            src={product.imageUrl || '/placeholder.jpg'}
+            alt={product.name}
+            className="w-full h-48 object-cover rounded-lg mb-2"
+          />
+          <h3 className="text-lg font-semibold text-center mb-1">{product.name}</h3>
+          <p className="text-red-600 font-bold text-md mb-2">{product.price.toFixed(2)} TL</p>
+          <button
+            onClick={() =>
+              addToCart({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                category: product.category,
+              })
+            }
+            className="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full text-sm"
+          >
+            Sepete Ekle
+          </button>
         </div>
-
-        {/* Çok Satanlar */}
-        <div className="max-w-7xl mx-auto my-8">
-          <h2 className="text-xl font-bold mb-4 text-center text-gray-800">Çok Satanlar</h2>
-          <BestSellersSlider />
-        </div>
-
-        {/* Kategori Butonları */}
-        <div className="bg-gray-50 py-2 px-4 rounded-xl shadow-sm mb-10 max-w-7xl mx-auto overflow-x-auto">
-          <div className="flex gap-4 justify-center flex-wrap text-sm font-semibold text-gray-700">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`transition px-3 pb-1 border-b-2 rounded-t-lg whitespace-nowrap ${
-                  selectedCategory === cat
-                    ? 'border-red-600 text-red-600 font-bold'
-                    : 'border-transparent hover:border-gray-400 hover:text-black'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {/* Popüler Kategoriler */}
-      <PopularCategories />
-    </>
+      ))}
+    </main>
   );
 }
