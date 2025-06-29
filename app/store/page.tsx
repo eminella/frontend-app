@@ -10,8 +10,8 @@ import BannerSlider from '@/components/BannerSlider';
 import PopularCategories from '@/components/PopularCategories';
 import ProductSlider from '@/components/ProductSlider';
 import BestSellersSlider from '@/components/BestSellersSlider';
-import PuzzleSlider from '@/components/PuzzleSlider';
 
+// Ürün tipi
 type Product = {
   id: number;
   name: string;
@@ -23,6 +23,7 @@ type Product = {
   reviewCount?: number;
 };
 
+// Kategori listesi
 const categories = ['Tümü', 'Kolye', 'Küpe', 'Bileklik', 'Yüzük'];
 
 export default function StorePage() {
@@ -55,36 +56,30 @@ export default function StorePage() {
 
   return (
     <>
-      <main className="min-h-screen bg-gradient-to-br from-white to-yellow-50 py-8 px-6 w-full">
-        {/* ⭐ Banner slider */}
+      <main className="min-h-screen bg-white py-4 px-4 w-full">
+        {/* Banner */}
         <BannerSlider />
 
-        {/* 🔥 Kampanya Ürünleri */}
-        <div className="max-w-7xl mx-auto my-10">
-          <h2 className="text-2xl font-bold mb-4 text-center text-red-700">Kampanyalı Ürünler</h2>
+        {/* Kampanyalı Ürünler */}
+        <div className="max-w-7xl mx-auto my-8">
+          <h2 className="text-xl font-bold mb-4 text-center text-gray-800">Kampanyalı Ürünler</h2>
           <ProductSlider />
         </div>
 
-        {/* 🧩 Puzzle Modelleri */}
-        <div className="max-w-7xl mx-auto my-10">
-          <h2 className="text-2xl font-bold mb-4 text-center text-red-700">Puzzle Modelleri</h2>
-          <PuzzleSlider />
-        </div>
-
-        {/* 💥 Çok Satanlar */}
-        <div className="max-w-7xl mx-auto my-10">
-          <h2 className="text-2xl font-bold mb-4 text-center text-red-700">Çok Satanlar</h2>
+        {/* Çok Satanlar */}
+        <div className="max-w-7xl mx-auto my-8">
+          <h2 className="text-xl font-bold mb-4 text-center text-gray-800">Çok Satanlar</h2>
           <BestSellersSlider />
         </div>
 
-        {/* 🧭 Kategori Menüsü */}
-        <div className="bg-gray-100 py-3 px-6 rounded-xl shadow-sm mb-10 max-w-7xl mx-auto overflow-x-auto">
-          <div className="flex gap-6 justify-center flex-wrap text-sm font-semibold text-gray-700">
+        {/* Kategori Butonları */}
+        <div className="bg-gray-50 py-2 px-4 rounded-xl shadow-sm mb-10 max-w-7xl mx-auto overflow-x-auto">
+          <div className="flex gap-4 justify-center flex-wrap text-sm font-semibold text-gray-700">
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`transition px-3 pb-2 border-b-4 rounded-t-lg ${
+                className={`transition px-3 pb-1 border-b-2 rounded-t-lg whitespace-nowrap ${
                   selectedCategory === cat
                     ? 'border-red-600 text-red-600 font-bold'
                     : 'border-transparent hover:border-gray-400 hover:text-black'
@@ -97,7 +92,7 @@ export default function StorePage() {
         </div>
       </main>
 
-      {/* 🔻 ALTTA POPÜLER KATEGORİLER */}
+      {/* Popüler Kategoriler */}
       <PopularCategories />
     </>
   );
